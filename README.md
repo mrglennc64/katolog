@@ -1,39 +1,40 @@
-# Katolog — Whitelabel Partner Portal
+# Kataloghub — Validering av musikförlagskataloger
 
 Static-HTML, brand-agnostic version of the Kataloghub partner-facing
-catalog tools. Drop into any web host (no build step), then run a
+catalog tools. **Validation-only** — no correction logic, no CWR generation,
+no workflow logic. Drop into any web host (no build step), then run a
 search/replace to swap `{{PartnerBrand}}`, `{{PartnerContact}}`, and
 `{{PartnerDomain}}` for the partner's values.
+
+Korrigering av metadata utförs separat via HeyRoya och ingår inte i Kataloghub.
 
 ## Repo layout
 
 ```
 .
 ├── README.md
-├── about.txt           # product spec (what to deliver, partner-safe rules)
+├── about.txt           # product spec (validation-only, partner-safe rules)
 ├── plan.txt            # engineering rules (single-file static, no Node, etc.)
 ├── brand.config.json   # placeholder values + theme tokens for one partner
+├── lib/
+│   └── tier-limits.js          # backend tier-limit enforcement module
+├── scripts/
+│   └── minify-pages.ps1        # conservative inline-asset minifier
 └── pages/
-    ├── index.html               # marketing landing
-    ├── how-it-works.html        # 6-step workflow detail
-    ├── pricing.html             # partner-facing wholesale tiers
-    ├── pricing-kataloghub.html  # Kataloghub SaaS pricing (SV, hardcoded brand)
-    ├── faq.html                 # 15 Q&A in 4 categories
-    ├── partner.html             # 5-day onboarding timeline
-    ├── contact.html             # contact form (mailto-only)
-    ├── terms.html               # 10-clause terms of service
-    ├── portal.html              # partner-facing portal (sidebar nav,
-    │                             # Catalog Ingest Engine with folder
-    │                             # drag-drop + SHA-256 hashing,
-    │                             # Exportfiler driven by localStorage)
-    ├── scan-catalog.html        # Part 1 — real working catalog scanner
-    │                             # (parses CSV, builds XLSX worksheet
-    │                             # via ExcelJS, generates Health Report HTML)
-    └── apply-corrections.html   # Part 2 — real working corrections merge
-                                  # (produces cleaned CSV + after-cleaning
-                                  # Health Report; CWR generation handled
-                                  # by /api/cwr/generate on the backend)
+    ├── index.html              # marketing landing
+    ├── how-it-works.html       # 3-step validation workflow
+    ├── pricing.html            # partner-facing wholesale tiers
+    ├── pricing-kataloghub.html # Kataloghub publisher pricing (Lite/Standard/Enterprise)
+    ├── faq.html                # vanliga frågor
+    ├── partner.html            # 5-day onboarding timeline
+    ├── contact.html            # contact form (mailto-only)
+    ├── terms.html              # 13-clause villkor
+    ├── portal.html             # Historik — read-only scan history
+    └── scan-catalog.html       # validation tool: CSV in → PDF + CSV-mall
 ```
+
+All operational pages are Swedish-only and follow Carina-tone (kort, neutral,
+operativ, faktabaserad, utan hype, utan metaforer, utan värdeord).
 
 ## Two ways to deploy
 
@@ -49,6 +50,8 @@ Cloudflare Pages, GitHub Pages). For a single partner:
 2. To rebrand colors: search/replace the `--accent` hex value in the
    `:root` block of each HTML file. Defaults are the Kataloghub palette
    (see `brand.config.json` for the tokens).
+3. Optionally run `scripts/minify-pages.ps1` to produce a `pages.min/`
+   directory with stripped comments and tightened whitespace.
 
 ### 2. Multi-tenant via Kataloghub Phase 1 (recommended)
 
@@ -59,33 +62,66 @@ Postgres, and substitutes the placeholders + injects the per-tenant
 accent color before serving. One deploy, every partner under their own
 custom domain via CNAME.
 
+The backend may also inject:
+- `window.KATALOGHUB_TIER_CONFIG` — `{ maxWorksPerValidation, maxValidationsPerPeriod, maxCatalogsPerPeriod }`
+- `window.KATALOGHUB_USAGE_STATE` — `{ validationsThisPeriod, catalogsThisPeriod, userId }`
+- `window.KATALOGHUB_HISTORY` — array of `{ date, catalog, works, status, reportUrl?, csvUrl?, blockCode? }`
+- `window.KATALOGHUB_PERIOD` — current period meta for the Historik page
+
+Defaults if not injected: Lite-tier limits (1 000 verk per validering, 1
+validering per månad, 1 katalog per månad), empty history.
+
 See the auto repo (`mrglennc64/auto`) for the backend implementation:
 - `app/api/portal.py` — the rendering route
 - `app/services/tenants.py` — tenant lookup + cache + placeholder render
 - `scripts/add_tenant.py` — admin CLI for tenant creation
 - Migration `alembic/versions/0003_add_tenants.py`
 
-## Strict rules (from about.txt and plan.txt)
+## Strict rules
 
+- **Validation only.** No correction logic. No CWR generation. No workflow
+  logic. No automatic upgrades. No analytics or usage dashboards.
 - **Single-file pattern**: each page is self-contained — inline CSS +
-  inline JS, no external bundles, no build step.
-- **Tone**: Scandinavian enterprise — short, factual, metadata-only,
-  zero-trust. No marketing adjectives, no royalty/financial claims, no
-  system-access implications.
+  inline JS, no external bundles, no build step (apart from the optional
+  minify script).
+- **Tone**: Carina-tone — short, neutral, operational, fact-based, no hype,
+  no metaphors, no value-words, no marketing CTAs in administrative copy.
 - **Boundaries**: file-based only, no live system access, no API
   endpoints exposed to the partner's end-clients, no automated changes
   to ownership data.
+- **Tier-limit enforcement**: validation is gated by tier. Either full
+  validation or no validation — no partial validation. Violations show
+  Carina-tone administrative messages only (no upsell, no CTA buttons,
+  no "uppgradera" language).
 
-## Workflow tools (the partner-facing core)
+## Tier-limit module
 
-- **`scan-catalog.html`** — Partner uploads a catalog CSV, gets back a
-  Health Report and an XLSX worksheet listing every issue requiring
-  publisher decision.
-- **`apply-corrections.html`** — Partner uploads the filled-in
-  worksheet plus the original catalog. Tool merges the publisher's
-  Accept / Edit / Reject decisions and emits a cleaned CSV plus an
-  after-cleaning Health Report.
+`lib/tier-limits.js` implements server-side validation gating. Public API:
 
-Both tools run 100% client-side (no backend required). Real CWR v2.1
-generation lives behind the backend `POST /api/cwr/generate` endpoint
-(scaffolded; real builder TBD — see auto repo).
+```js
+const { validateTierLimits, countWorks, MESSAGES } = require('./lib/tier-limits.js');
+
+const result = validateTierLimits(
+  uploadedFile,                                        // CSV string or Buffer
+  { maxWorksPerValidation: 1000,                       // tier config
+    maxValidationsPerPeriod: 1,
+    maxCatalogsPerPeriod: 1 },
+  { validationsThisPeriod: 0,                          // usage state
+    catalogsThisPeriod: 0,
+    userId: 'publisher-42' }
+);
+// → { status: 'allowed' | 'blocked', reason: string, code: string }
+// codes: OK | LIMIT_WORKS | LIMIT_VALIDATIONS | LIMIT_CATALOGS
+```
+
+Logging on block: timestamp, userId, numberOfWorks, reasonCode. No
+analytics, no aggregation, no dashboards.
+
+## Validation tool — outputs
+
+`pages/scan-catalog.html` produces exactly two artifacts per scan:
+
+- **PDF** (Health Report) — printable from the browser, generated by `Generera hälsorapport (PDF)`.
+- **CSV-mall** — 8-column CSV (`issue_id, work, field, current_value, suggested, decision, publisher_value, note`) used as input for correction via HeyRoya.
+
+No XLSX, no instructions.txt, no CWR export, no cleaned-catalog export.
