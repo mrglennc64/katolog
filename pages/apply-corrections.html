@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
 <meta charset="UTF-8" />
-<title>Apply Corrections — {{PartnerBrand}}</title>
+<title>Tillämpa korrigeringar — {{PartnerBrand}}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -65,48 +65,100 @@
   <header class="top">
     <div class="brand">{{PartnerBrand}}</div>
     <div class="meta">
-      <a href="portal.html" style="color:#8f9bb3;margin-right:12px;">← back to portal</a>
+      <a href="portal.html" style="color:#8f9bb3;margin-right:12px;">← tillbaka till portalen</a>
     </div>
   </header>
 
   <div style="background:#0b0f18; border:1px solid #1b2233; border-radius:12px; padding:0.85rem 1.25rem; margin-bottom:1.5rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center; font-size:13px;">
-    <span style="color:#8f9bb3; text-transform:uppercase; letter-spacing:0.06em; font-size:11px; font-weight:700; margin-right:0.5rem;">Workflow:</span>
-    <a href="scan-catalog.html" style="color:#8f9bb3;">1. Scan catalog</a>
+    <span style="color:#8f9bb3; text-transform:uppercase; letter-spacing:0.06em; font-size:11px; font-weight:700; margin-right:0.5rem;">Arbetsflöde:</span>
+    <a href="scan-catalog.html" style="color:#8f9bb3;">1. Skanna katalog</a>
     <span style="color:#2a3345;">→</span>
-    <a href="apply-corrections.html" style="color:#1dd4b7; font-weight:700;">2. Apply corrections</a>
+    <a href="apply-corrections.html" style="color:#1dd4b7; font-weight:700;">2. Tillämpa korrigeringar</a>
   </div>
 
   <section class="hero">
-    <h1>Apply publisher corrections to the catalog</h1>
-    <p>Load the original catalog CSV plus the publisher's filled-in <code style="background:#0b0f18;padding:1px 6px;border-radius:4px;font-size:12px;color:#1dd4b7;">corrections-worksheet.csv</code>. The tool merges their decisions and produces a cleaned catalog ready for export.</p>
+    <h1>Tillämpa förlagets korrigeringar på katalogen</h1>
+    <p>Ladda upp den ursprungliga katalog-CSV:n tillsammans med förlagets ifyllda <code style="background:#0b0f18;padding:1px 6px;border-radius:4px;font-size:12px;color:#1dd4b7;">corrections-worksheet.csv</code>. Verktyget sammanför besluten och skapar en rensad katalog redo för export.</p>
   </section>
 
   <div class="upload-grid">
     <div class="upload-card">
-      <h3>1. Original catalog</h3>
-      <p class="hint">CSV with columns: title, iswc, isrc, name, role, share_percent, ipi, society</p>
+      <h3>1. Ursprunglig katalog</h3>
+      <p class="hint">CSV med kolumner: title, iswc, isrc, name, role, share_percent, ipi, society</p>
       <input type="file" id="catalogFile" accept=".csv" />
       <div class="filename" id="catalogName"></div>
     </div>
     <div class="upload-card">
-      <h3>2. Corrections worksheet (from publisher)</h3>
-      <p class="hint">CSV with columns: issue_id, work, field, current_value, suggested, decision, publisher_value, note</p>
+      <h3>2. Arbetsblad för korrigeringar (från förlaget)</h3>
+      <p class="hint">CSV med kolumner: issue_id, work, field, current_value, suggested, decision, publisher_value, note</p>
       <input type="file" id="correctionsFile" accept=".csv" />
       <div class="filename" id="correctionsName"></div>
     </div>
   </div>
 
   <div class="actions">
-    <button class="btn btn-primary" id="processBtn" disabled>Apply corrections</button>
-    <button class="btn btn-secondary" id="downloadBtn" disabled>Download cleaned CSV</button>
-    <button class="btn btn-secondary" id="reportBtn" disabled>Generate after-cleaning report (HTML)</button>
+    <button class="btn btn-primary" id="processBtn" disabled>Tillämpa korrigeringar</button>
+    <button class="btn btn-secondary" id="downloadBtn" disabled>Ladda ner rensad CSV</button>
+    <button class="btn btn-secondary" id="reportBtn" disabled>Generera rapport efter rensning (HTML)</button>
+    <button class="btn btn-secondary" id="cwrBtn" disabled>Generera CWR-paket (.v21)</button>
+    <button class="btn btn-secondary" id="cwrSettingsBtn" type="button" title="CWR-inställningar" style="padding:0.7rem 0.9rem;">⚙</button>
   </div>
 
-  <div class="status" id="status">Load both files to begin.</div>
+  <dialog id="cwrSettings" style="border:1px solid #1b2233; border-radius:12px; background:#0b0f18; color:#f5f7fb; padding:0; max-width:420px; width:90%;">
+    <form method="dialog" id="cwrSettingsForm" style="padding:1.5rem 1.7rem;">
+      <h3 style="font-size:13px; color:#1dd4b7; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px;">CWR-inställningar</h3>
+      <p style="color:#8f9bb3; font-size:12px; margin-bottom:16px;">Sparas lokalt i webbläsaren. Krävs för att generera CWR-paket via /api/cwr/generate.</p>
+      <label style="display:block; margin-bottom:10px;">
+        <span style="display:block; font-size:11px; color:#8f9bb3; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">API-nyckel (X-API-Key)</span>
+        <input id="cs-key" type="password" required style="width:100%; padding:8px 10px; background:#05070b; border:1px solid #1b2233; border-radius:6px; color:#f5f7fb; font-family:monospace; font-size:12px;">
+      </label>
+      <label style="display:block; margin-bottom:10px;">
+        <span style="display:block; font-size:11px; color:#8f9bb3; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Avsändarnamn (HDR)</span>
+        <input id="cs-name" type="text" required maxlength="45" style="width:100%; padding:8px 10px; background:#05070b; border:1px solid #1b2233; border-radius:6px; color:#f5f7fb; font-size:13px;">
+      </label>
+      <label style="display:block; margin-bottom:10px;">
+        <span style="display:block; font-size:11px; color:#8f9bb3; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Avsändar-IPI (9–11 siffror)</span>
+        <input id="cs-ipi" type="text" required pattern="[0-9]{9,11}" style="width:100%; padding:8px 10px; background:#05070b; border:1px solid #1b2233; border-radius:6px; color:#f5f7fb; font-family:monospace; font-size:13px;">
+      </label>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px;">
+        <label>
+          <span style="display:block; font-size:11px; color:#8f9bb3; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Mål-PRO</span>
+          <select id="cs-pro" style="width:100%; padding:8px 10px; background:#05070b; border:1px solid #1b2233; border-radius:6px; color:#f5f7fb; font-size:13px;">
+            <option value="STIM">STIM</option>
+            <option value="ASCAP">ASCAP</option>
+            <option value="BMI">BMI</option>
+            <option value="SESAC">SESAC</option>
+            <option value="PRS">PRS</option>
+            <option value="GEMA">GEMA</option>
+            <option value="SACEM">SACEM</option>
+            <option value="OTHER">Annat</option>
+          </select>
+        </label>
+        <label>
+          <span style="display:block; font-size:11px; color:#8f9bb3; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Insamling</span>
+          <select id="cs-scope" style="width:100%; padding:8px 10px; background:#05070b; border:1px solid #1b2233; border-radius:6px; color:#f5f7fb; font-size:13px;">
+            <option value="LOCAL">Lokalt (PRO-land)</option>
+            <option value="WORLDWIDE">Världen</option>
+            <option value="CUSTOM">Anpassat</option>
+          </select>
+        </label>
+      </div>
+      <label id="cs-share-wrap" style="display:none; margin-bottom:10px;">
+        <span style="display:block; font-size:11px; color:#8f9bb3; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Förlagsandel (basis points, 10000 = 100%)</span>
+        <input id="cs-share" type="number" min="0" max="10000" value="3333" style="width:100%; padding:8px 10px; background:#05070b; border:1px solid #1b2233; border-radius:6px; color:#f5f7fb; font-family:monospace; font-size:13px;">
+      </label>
+      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:14px;">
+        <button type="button" id="cs-cancel" class="btn btn-secondary" style="padding:0.5rem 1rem; font-size:12px;">Avbryt</button>
+        <button type="submit" class="btn btn-primary" style="padding:0.5rem 1rem; font-size:12px;">Spara</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="status" id="status">Ladda upp båda filerna för att börja.</div>
 
   <div class="preview" id="preview" style="display:none;">
     <div class="preview-header">
-      <h3>Decisions applied</h3>
+      <h3>Tillämpade beslut</h3>
       <span class="count" id="previewCount"></span>
     </div>
     <table>
@@ -118,11 +170,11 @@
   </div>
 
   <div class="docs">
-    <h3>How the merge works</h3>
-    <p><strong style="color:#1dd4b7;">accept</strong> — apply the suggested value (rebalance splits to 100%, set canonical name, fill in ISWC, etc.)</p>
-    <p><strong style="color:#f87171;">reject</strong> — keep the original value. Issue is logged but not applied.</p>
-    <p><strong style="color:#f2b36a;">edit</strong> — apply the publisher's <code>publisher_value</code> instead of the suggestion.</p>
-    <p style="margin-top:0.75rem; color:#8f9bb3; font-size:12px;">Sample worksheet: <a href="/samples/corrections-worksheet-template.csv">corrections-worksheet-template.csv</a> · Sample catalog: <a href="/samples/test-20-works.csv">test-20-works.csv</a></p>
+    <h3>Så fungerar sammanslagningen</h3>
+    <p><strong style="color:#1dd4b7;">accept</strong> — tillämpa föreslaget värde (exempel: balansera andelar till 100 %, sätt kanoniskt namn, fyll i ISWC)</p>
+    <p><strong style="color:#f87171;">reject</strong> — behåll ursprungligt värde (ärendet loggas men tillämpas inte)</p>
+    <p><strong style="color:#f2b36a;">edit</strong> — använd förlagets <code>publisher_value</code> i stället för förslaget</p>
+    <p style="margin-top:0.75rem; color:#8f9bb3; font-size:12px;">Exempelarbetsblad: <a href="/samples/corrections-worksheet-template.csv">corrections-worksheet-template.csv</a> · Exempelkatalog: <a href="/samples/test-20-works.csv">test-20-works.csv</a></p>
   </div>
 
 </div>
@@ -158,7 +210,7 @@ readFile($('correctionsFile'), 'correctionsText', $('correctionsName'));
 function checkReady() {
   if (window.catalogText && window.correctionsText) {
     $('processBtn').disabled = false;
-    status('Both files loaded — click <strong>Apply corrections</strong> to merge.');
+    status('Båda filer inlästa — klicka <strong>Tillämpa korrigeringar</strong> för att slå ihop.');
   }
 }
 
@@ -197,7 +249,7 @@ $('processBtn').addEventListener('click', () => {
   try {
     const catRows = parseCSV(window.catalogText);
     const corrRows = parseCSV(window.correctionsText);
-    if (catRows.length < 2 || corrRows.length < 2) throw new Error('Both files must have a header + at least 1 row.');
+    if (catRows.length < 2 || corrRows.length < 2) throw new Error('Båda filerna måste ha en rubrikrad + minst 1 datarad.');
 
     const catHeader = catRows[0].map(h => h.trim().toLowerCase());
     const corrHeader = corrRows[0].map(h => h.trim().toLowerCase());
@@ -211,7 +263,7 @@ $('processBtn').addEventListener('click', () => {
     const roleIdx = ci('role');
     const ipiIdx = ci('ipi');
     const societyIdx = ci('society');
-    if (titleIdx < 0 || nameIdx < 0) throw new Error('Catalog must have title + name columns.');
+    if (titleIdx < 0 || nameIdx < 0) throw new Error('Katalogen måste ha kolumnerna title + name.');
 
     const decIdx = cj('decision');
     const fieldIdx = cj('field');
@@ -347,19 +399,20 @@ $('processBtn').addEventListener('click', () => {
       tbody.appendChild(tr);
     });
     $('preview').style.display = 'block';
-    $('previewCount').textContent = log.length + ' decisions · ' + acceptCount + ' accepted · ' + rejectCount + ' rejected · ' + editCount + ' edited';
+    $('previewCount').textContent = log.length + ' beslut · ' + acceptCount + ' godkända · ' + rejectCount + ' avvisade · ' + editCount + ' ändrade';
 
-    status('<div class="row ok"><span>Status</span><strong>✓ Corrections applied</strong></div>'+
-      '<div class="row"><span>Decisions processed</span><strong>'+log.length+'</strong></div>'+
-      '<div class="row"><span>Accepted</span><strong style="color:#1dd4b7;">'+acceptCount+'</strong></div>'+
-      '<div class="row"><span>Rejected</span><strong style="color:#f87171;">'+rejectCount+'</strong></div>'+
-      '<div class="row"><span>Edited</span><strong style="color:#f2b36a;">'+editCount+'</strong></div>', 'success');
+    status('<div class="row ok"><span>Status</span><strong>✓ Korrigeringar tillämpade</strong></div>'+
+      '<div class="row"><span>Beslut behandlade</span><strong>'+log.length+'</strong></div>'+
+      '<div class="row"><span>Godkända</span><strong style="color:#1dd4b7;">'+acceptCount+'</strong></div>'+
+      '<div class="row"><span>Avvisade</span><strong style="color:#f87171;">'+rejectCount+'</strong></div>'+
+      '<div class="row"><span>Ändrade</span><strong style="color:#f2b36a;">'+editCount+'</strong></div>', 'success');
 
     $('downloadBtn').disabled = false;
     $('reportBtn').disabled = false;
+    $('cwrBtn').disabled = false;
 
   } catch (e) {
-    status('<strong>✕ Error:</strong> ' + e.message, 'error');
+    status('<strong>✕ Fel:</strong> ' + e.message, 'error');
     console.error(e);
   }
 });
@@ -466,13 +519,13 @@ function buildAfterReport(scan) {
   const heroBorder = tone === 'good' ? '#1f7a4a' : tone === 'warn' ? '#7a5a30' : '#6b3a30';
   const heroAccent = tone === 'good' ? '#86efac' : '#fbbf77';
   const accent = tone === 'good' ? '#1dd4b7' : tone === 'warn' ? '#f2b36a' : '#f87171';
-  const tagText = tone === 'good' ? '✓ After cleaning · CWR-ready' : '⚠ After cleaning · residual issues';
-  const heroH1 = tone === 'good' ? 'Catalog is CWR-ready' : tone === 'warn' ? 'Improved — some issues remain' : 'Major issues still present';
+  const tagText = tone === 'good' ? '✓ Efter rensning · CWR-ready' : '⚠ Efter rensning · restavvikelser';
+  const heroH1 = tone === 'good' ? 'Katalogen är CWR-ready' : tone === 'warn' ? 'Förbättrad — vissa avvikelser kvarstår' : 'Stora avvikelser kvarstår';
   const issueRows = issues.map(i =>
     `<tr><td><code style="color:${accent};font-family:monospace;">${escapeHtml(i.id)}</code></td><td>${escapeHtml(i.work)}</td><td><span style="color:${accent};font-family:monospace;font-size:11px;">${escapeHtml(i.field)}</span></td><td>${escapeHtml(i.current)}</td><td><span style="display:inline-block;padding:1px 8px;border-radius:999px;font-family:monospace;font-size:10px;font-weight:700;background:rgba(248,113,113,0.12);color:#f87171;border:1px solid rgba(248,113,113,0.3);">${escapeHtml(i.severity)}</span></td></tr>`
   ).join('');
-  const noIssuesMsg = '<tr><td colspan="5" style="padding:20px;text-align:center;color:#1dd4b7;">All checks pass — no residual issues.</td></tr>';
-  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Metadata Health Report (After Cleaning) — {{PartnerBrand}}</title><style>
+  const noIssuesMsg = '<tr><td colspan="5" style="padding:20px;text-align:center;color:#1dd4b7;">Inga avvikelser — alla kontroller godkända.</td></tr>';
+  return `<!DOCTYPE html><html lang="sv"><head><meta charset="UTF-8"><title>Metadatahälsorapport (efter rensning) — {{PartnerBrand}}</title><style>
 * { box-sizing:border-box; margin:0; padding:0; }
 body { background:#05070b; color:#f5f7fb; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; line-height:1.55; -webkit-font-smoothing:antialiased; padding:32px 20px 64px; }
 .container { max-width:1080px; margin:0 auto; }
@@ -507,12 +560,12 @@ header { display:flex; justify-content:space-between; align-items:center; paddin
 .disclaimer p { color:#c3cad8; font-size:13px; }
 @media print { body { background:#fff; color:#000; } .print-btn { display:none; } .hero, .summary-card, .tbl, .disclaimer { background:#fff !important; border:1px solid #ccc !important; color:#000 !important; } }
 </style></head><body><div class="container">
-<header><div class="brand">{{PartnerBrand}} · Metadata Health Report</div><div><div class="meta">Catalog: ${titles.length} works · ${totalContribs} contributor entries</div><div class="meta">Scan ID: ${escapeHtml(scanId)} · Generated ${escapeHtml(date)}</div><button class="print-btn" onclick="window.print()">🖨 Print / Save as PDF</button></div></header>
-<div class="hero"><div><span class="tag">${tagText}</span><h1>${heroH1}</h1><p>${titles.length} works analyzed · ${issues.length} ${issues.length === 1 ? 'residual issue' : 'residual issues'} · ${blocking} blocking · ${resolvable} resolvable.</p></div><div class="score-circle"><div class="score-num">${score}</div><div class="score-label">/ 100</div></div></div>
-<div class="summary-row"><div class="summary-card green"><div class="label">Works analyzed</div><div class="value">${titles.length}</div></div><div class="summary-card ${issues.length === 0 ? 'green' : 'amber'}"><div class="label">Residual issues</div><div class="value">${issues.length}</div></div><div class="summary-card ${blocking === 0 ? 'green' : 'red'}"><div class="label">Blocking</div><div class="value">${blocking}</div></div><div class="summary-card ${resolvable === 0 ? 'green' : 'amber'}"><div class="label">Resolvable</div><div class="value">${resolvable}</div></div></div>
-<div class="section"><h2>Residual issues</h2><div class="tbl"><table><thead><tr><th>ID</th><th>Work</th><th>Field</th><th>Detail</th><th>Severity</th></tr></thead><tbody>${issueRows || noIssuesMsg}</tbody></table></div></div>
-<div class="disclaimer"><div class="label">After-cleaning diagnostic</div><p>This report reflects the catalog state after applying publisher-confirmed corrections from the worksheet. Issues remaining here were either rejected, edited with values that still fail validation, or were not part of the original scan. Re-scan to refresh.</p></div>
-<p style="font-size:11px;color:#8f9bb3;text-align:center;margin-top:24px;">{{PartnerBrand}} · Metadata compliance · {{PartnerContact}}</p>
+<header><div class="brand">{{PartnerBrand}} · Metadatahälsorapport</div><div><div class="meta">Katalog: ${titles.length} verk · ${totalContribs} upphovsposteringar</div><div class="meta">Scan-ID: ${escapeHtml(scanId)} · Genererad ${escapeHtml(date)}</div><button class="print-btn" onclick="window.print()">🖨 Skriv ut / Spara som PDF</button></div></header>
+<div class="hero"><div><span class="tag">${tagText}</span><h1>${heroH1}</h1><p>${titles.length} verk analyserade · ${issues.length} ${issues.length === 1 ? 'restavvikelse' : 'restavvikelser'} · ${blocking} blockerande · ${resolvable} åtgärdbara.</p></div><div class="score-circle"><div class="score-num">${score}</div><div class="score-label">/ 100</div></div></div>
+<div class="summary-row"><div class="summary-card green"><div class="label">Analyserade verk</div><div class="value">${titles.length}</div></div><div class="summary-card ${issues.length === 0 ? 'green' : 'amber'}"><div class="label">Restavvikelser</div><div class="value">${issues.length}</div></div><div class="summary-card ${blocking === 0 ? 'green' : 'red'}"><div class="label">Blockerande</div><div class="value">${blocking}</div></div><div class="summary-card ${resolvable === 0 ? 'green' : 'amber'}"><div class="label">Åtgärdbara</div><div class="value">${resolvable}</div></div></div>
+<div class="section"><h2>Restavvikelser</h2><div class="tbl"><table><thead><tr><th>ID</th><th>Verk</th><th>Fält</th><th>Detalj</th><th>Allvar</th></tr></thead><tbody>${issueRows || noIssuesMsg}</tbody></table></div></div>
+<div class="disclaimer"><div class="label">Diagnostik efter rensning</div><p>Denna rapport visar katalogens status efter att förlagets bekräftade korrigeringar från arbetsbladet har tillämpats. Eventuella kvarvarande avvikelser här är sådana som avslogs av förlaget, redigerades med värden som fortfarande inte passerar validering, eller inte ingick i ursprunglig skanning. Kör en ny skanning för att uppdatera status.</p></div>
+<p style="font-size:11px;color:#8f9bb3;text-align:center;margin-top:24px;">{{PartnerBrand}} · Metadataefterlevnad · {{PartnerContact}}</p>
 </div></body></html>`;
 }
 
@@ -549,6 +602,105 @@ $('reportBtn').addEventListener('click', () => {
 const _origDownload = $('downloadBtn').onclick;
 $('downloadBtn').addEventListener('click', () => {
   if (cleanedCSV) saveExport('csv', 'catalog-cleaned-' + new Date().toISOString().slice(0, 10) + '.csv', cleanedCSV, 'text/csv');
+});
+
+// ─── CWR settings (localStorage-backed, per-browser) ────────────────────────
+var CWR_KEYS = ['cwr.api_key', 'cwr.submitter_name', 'cwr.submitter_ipi', 'cwr.target_pro', 'cwr.collection_scope', 'cwr.custom_share_bp'];
+function cwrSettingsLoad() {
+  return {
+    api_key: localStorage.getItem('cwr.api_key') || '',
+    submitter_name: localStorage.getItem('cwr.submitter_name') || '',
+    submitter_ipi: localStorage.getItem('cwr.submitter_ipi') || '',
+    target_pro: localStorage.getItem('cwr.target_pro') || 'STIM',
+    collection_scope: localStorage.getItem('cwr.collection_scope') || 'LOCAL',
+    custom_share_bp: localStorage.getItem('cwr.custom_share_bp') || '3333',
+  };
+}
+function cwrSettingsValid(s) {
+  return !!(s.api_key && s.submitter_name && /^[0-9]{9,11}$/.test(s.submitter_ipi));
+}
+function cwrSettingsOpen() {
+  var s = cwrSettingsLoad();
+  $('cs-key').value = s.api_key;
+  $('cs-name').value = s.submitter_name;
+  $('cs-ipi').value = s.submitter_ipi;
+  $('cs-pro').value = s.target_pro;
+  $('cs-scope').value = s.collection_scope;
+  $('cs-share').value = s.custom_share_bp;
+  $('cs-share-wrap').style.display = (s.collection_scope === 'CUSTOM') ? 'block' : 'none';
+  $('cwrSettings').showModal();
+}
+$('cwrSettingsBtn').addEventListener('click', cwrSettingsOpen);
+$('cs-scope').addEventListener('change', function(e){
+  $('cs-share-wrap').style.display = (e.target.value === 'CUSTOM') ? 'block' : 'none';
+});
+$('cs-cancel').addEventListener('click', function(){ $('cwrSettings').close(); });
+$('cwrSettingsForm').addEventListener('submit', function(e){
+  // Native dialog form 'submit' closes the dialog automatically
+  localStorage.setItem('cwr.api_key', $('cs-key').value.trim());
+  localStorage.setItem('cwr.submitter_name', $('cs-name').value.trim());
+  localStorage.setItem('cwr.submitter_ipi', $('cs-ipi').value.trim());
+  localStorage.setItem('cwr.target_pro', $('cs-pro').value);
+  localStorage.setItem('cwr.collection_scope', $('cs-scope').value);
+  localStorage.setItem('cwr.custom_share_bp', $('cs-share').value);
+});
+
+// ─── Generate CWR via /api/cwr/generate ─────────────────────────────────────
+$('cwrBtn').addEventListener('click', async function() {
+  if (!cleanedCSV) return;
+  var s = cwrSettingsLoad();
+  if (!cwrSettingsValid(s)) {
+    status('<strong>⚙ Inställningar krävs:</strong> öppna kugghjulet för att ange API-nyckel, avsändarnamn och IPI.', 'error');
+    cwrSettingsOpen();
+    return;
+  }
+
+  status('Genererar CWR-paket…');
+  $('cwrBtn').disabled = true;
+
+  var fd = new FormData();
+  fd.append('cleaned_catalog_csv', new Blob([cleanedCSV], { type: 'text/csv' }), 'catalog-cleaned.csv');
+  fd.append('submitter_name', s.submitter_name);
+  fd.append('submitter_ipi', s.submitter_ipi);
+  fd.append('target_pro', s.target_pro);
+  fd.append('collection_scope', s.collection_scope);
+  if (s.collection_scope === 'CUSTOM') fd.append('custom_share_bp', s.custom_share_bp);
+
+  try {
+    var r = await fetch('/api/cwr/generate', { method: 'POST', headers: { 'X-API-Key': s.api_key }, body: fd });
+    if (!r.ok) {
+      var msg;
+      try { var j = await r.json(); msg = j.message || j.detail || ('HTTP ' + r.status); }
+      catch (e) { msg = 'HTTP ' + r.status; }
+      status('<strong>✕ CWR-fel:</strong> ' + msg, 'error');
+      $('cwrBtn').disabled = false;
+      return;
+    }
+    var blob = await r.blob();
+    var filename = 'cwr-package-' + new Date().toISOString().slice(0, 10) + '.v21';
+    // Honor server's Content-Disposition if present
+    var cd = r.headers.get('content-disposition') || '';
+    var m = /filename="?([^";]+)"?/.exec(cd);
+    if (m) filename = m[1];
+
+    // Download
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a'); a.href = url; a.download = filename; a.click();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+
+    // Save text content to localStorage so portal Exportfiler lists it
+    var text = await blob.text();
+    saveExport('cwr', filename, text, 'application/octet-stream');
+
+    status('<div class="row ok"><span>Status</span><strong>✓ CWR-paket genererat</strong></div>'+
+      '<div class="row"><span>Filnamn</span><strong>'+filename+'</strong></div>'+
+      '<div class="row"><span>Storlek</span><strong>'+blob.size+' byte</strong></div>'+
+      '<div class="row"><span>Mål-PRO</span><strong>'+s.target_pro+' · '+s.collection_scope+'</strong></div>', 'success');
+    $('cwrBtn').disabled = false;
+  } catch (e) {
+    status('<strong>✕ Nätverksfel:</strong> ' + e.message, 'error');
+    $('cwrBtn').disabled = false;
+  }
 });
 </script>
 </body>

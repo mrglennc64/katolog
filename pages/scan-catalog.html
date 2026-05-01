@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
 <meta charset="UTF-8" />
-<title>Scan Catalog → Worksheet — {{PartnerBrand}}</title>
+<title>Skanna katalog → arbetsblad — {{PartnerBrand}}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
   * { box-sizing:border-box; margin:0; padding:0; }
@@ -74,49 +74,49 @@
   <header class="top">
     <div class="brand">{{PartnerBrand}}</div>
     <div class="meta">
-      <a href="portal.html" style="color:#8f9bb3;margin-right:12px;">← back to portal</a>
+      <a href="portal.html" style="color:#8f9bb3;margin-right:12px;">← tillbaka till portalen</a>
     </div>
   </header>
 
   <div style="background:#0b0f18; border:1px solid #1b2233; border-radius:12px; padding:0.85rem 1.25rem; margin-bottom:1.5rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center; font-size:13px;">
-    <span style="color:#8f9bb3; text-transform:uppercase; letter-spacing:0.06em; font-size:11px; font-weight:700; margin-right:0.5rem;">Workflow:</span>
-    <a href="scan-catalog.html" style="color:#1dd4b7; font-weight:700;">1. Scan catalog</a>
+    <span style="color:#8f9bb3; text-transform:uppercase; letter-spacing:0.06em; font-size:11px; font-weight:700; margin-right:0.5rem;">Arbetsflöde:</span>
+    <a href="scan-catalog.html" style="color:#1dd4b7; font-weight:700;">1. Skanna katalog</a>
     <span style="color:#2a3345;">→</span>
-    <a href="apply-corrections.html" style="color:#8f9bb3;">2. Apply corrections</a>
+    <a href="apply-corrections.html" style="color:#8f9bb3;">2. Tillämpa korrigeringar</a>
   </div>
 
   <section class="hero">
-    <h1>Generate corrections worksheet from a catalog</h1>
-    <p>Upload the publisher's catalog CSV. The tool runs the standard scan, identifies metadata issues, and outputs a <code style="background:#0b0f18;padding:1px 6px;border-radius:4px;font-size:12px;color:#1dd4b7;">corrections-worksheet.csv</code> ready to email to the publisher for their decisions.</p>
+    <h1>Generera arbetsblad för korrigeringar från en katalog</h1>
+    <p>Ladda upp förlagets katalog-CSV. Verktyget kör standardskanningen, identifierar metadataavvikelser och skapar en <code style="background:#0b0f18;padding:1px 6px;border-radius:4px;font-size:12px;color:#1dd4b7;">corrections-worksheet.csv</code> som kan skickas till förlaget för deras beslut.</p>
   </section>
 
   <div class="upload-card">
-    <h3>Catalog CSV</h3>
-    <p class="hint">Columns: title, iswc, isrc, name, role, share_percent, ipi, society</p>
+    <h3>Katalog-CSV</h3>
+    <p class="hint">Kolumner: title, iswc, isrc, name, role, share_percent, ipi, society</p>
     <input type="file" id="catalogFile" accept=".csv" />
     <div class="filename" id="catalogName"></div>
   </div>
 
   <div class="actions">
-    <button class="btn btn-primary" id="scanBtn" disabled>Run scan</button>
-    <button class="btn btn-secondary" id="downloadWorksheetBtn" disabled>Download worksheet (Excel)</button>
-    <button class="btn btn-secondary" id="downloadInstructionsBtn" disabled>Download instructions.txt</button>
-    <button class="btn btn-secondary" id="generateReportBtn" disabled>Generate Health Report (HTML/PDF)</button>
+    <button class="btn btn-primary" id="scanBtn" disabled>Kör skanning</button>
+    <button class="btn btn-secondary" id="downloadWorksheetBtn" disabled>Ladda ner arbetsblad (Excel)</button>
+    <button class="btn btn-secondary" id="downloadInstructionsBtn" disabled>Ladda ner instructions.txt</button>
+    <button class="btn btn-secondary" id="generateReportBtn" disabled>Generera hälsorapport (HTML/PDF)</button>
   </div>
 
-  <div class="status" id="status">Load a catalog CSV to begin.</div>
+  <div class="status" id="status">Ladda upp en katalog-CSV för att börja.</div>
 
   <div class="summary-cards" id="summaryCards" style="display:none;">
-    <div class="summary-card"><div class="label">Works analyzed</div><div class="value" id="cWorks">0</div></div>
-    <div class="summary-card amber"><div class="label">Issues found</div><div class="value" id="cIssues">0</div></div>
-    <div class="summary-card red"><div class="label">Blocking</div><div class="value" id="cBlocking">0</div></div>
-    <div class="summary-card amber"><div class="label">Resolvable</div><div class="value" id="cResolvable">0</div></div>
-    <div class="summary-card"><div class="label">Health score</div><div class="value" id="cScore">—</div></div>
+    <div class="summary-card"><div class="label">Verk analyserade</div><div class="value" id="cWorks">0</div></div>
+    <div class="summary-card amber"><div class="label">Avvikelser funna</div><div class="value" id="cIssues">0</div></div>
+    <div class="summary-card red"><div class="label">Blockerande</div><div class="value" id="cBlocking">0</div></div>
+    <div class="summary-card amber"><div class="label">Åtgärdbara</div><div class="value" id="cResolvable">0</div></div>
+    <div class="summary-card"><div class="label">Hälsopoäng</div><div class="value" id="cScore">—</div></div>
   </div>
 
   <div class="preview" id="preview" style="display:none;">
     <div class="preview-header">
-      <h3>Detected issues (worksheet preview)</h3>
+      <h3>Identifierade avvikelser (förhandsvisning av arbetsblad)</h3>
       <span class="count" id="previewCount"></span>
     </div>
     <table>
@@ -128,14 +128,15 @@
   </div>
 
   <div class="docs">
-    <h3>Workflow</h3>
+    <h3>Arbetsflöde</h3>
     <ol>
-      <li>Upload publisher's catalog → click <strong>Run scan</strong></li>
-      <li><strong>Download worksheet CSV</strong> + <strong>Download instructions.txt</strong></li>
+      <li>Ladda upp förlagets katalog → klicka <strong>Kör skanning</strong></li>
+      <li><strong>Ladda ner arbetsblad (CSV)</strong> + <strong>Ladda ner instructions.txt</strong></li>
       <li>Email both attachments to the publisher</li>
-      <li>When they reply with the filled-in worksheet, head to <a href="apply-corrections.html">apply-corrections</a> to merge it back into the catalog</li>
+      <li>Skicka båda filerna till förlaget</li>
+      <li>När de skickar tillbaka ifyllt arbetsblad → gå till <a href="apply-corrections.html">apply-corrections</a> för att slå ihop det med katalogen</li>
     </ol>
-    <p style="margin-top:0.75rem;">Sample catalog for testing: <a href="/samples/test-20-works.csv">/samples/test-20-works.csv</a></p>
+    <p style="margin-top:0.75rem;">Exempelkatalog för test: <a href="/samples/test-20-works.csv">/samples/test-20-works.csv</a></p>
   </div>
 
 </div>
@@ -152,7 +153,7 @@ $('catalogFile').addEventListener('change', e => {
   const f = e.target.files[0]; if (!f) return;
   $('catalogName').textContent = f.name;
   const r = new FileReader();
-  r.onload = ev => { catalogText = ev.target.result; $('scanBtn').disabled = false; status('File loaded — click <strong>Run scan</strong>.'); };
+  r.onload = ev => { catalogText = ev.target.result; $('scanBtn').disabled = false; status('Fil inläst — klicka <strong>Kör skanning</strong>.'); };
   r.readAsText(f);
 });
 
@@ -191,7 +192,7 @@ $('scanBtn').addEventListener('click', () => {
     const idx = name => h.indexOf(name);
     const ti = idx('title'), iswc = idx('iswc'), isrc = idx('isrc');
     const ni = idx('name'), ri = idx('role'), si = idx('share_percent'), ii = idx('ipi'), soi = idx('society');
-    if (ti < 0 || ni < 0) throw new Error('Catalog must have title + name columns.');
+    if (ti < 0 || ni < 0) throw new Error('Katalogen måste ha kolumnerna title + name.');
 
     // Group by title
     const works = {};
@@ -329,11 +330,11 @@ $('scanBtn').addEventListener('click', () => {
     $('preview').style.display = 'block';
     $('previewCount').textContent = issues.length + ' issues · ' + blocking + ' blocking · ' + resolvable + ' resolvable';
 
-    status('<div class="row ok"><span>Status</span><strong>✓ Scan complete</strong></div>'+
-      '<div class="row"><span>Works analyzed</span><strong>'+titles.length+'</strong></div>'+
-      '<div class="row"><span>Issues identified</span><strong>'+issues.length+'</strong></div>'+
-      '<div class="row"><span>Health score</span><strong>'+score+' / 100</strong></div>'+
-      '<div class="row"><span>Worksheet ready</span><strong style="color:#1dd4b7;">click "Download worksheet CSV"</strong></div>', 'success');
+    status('<div class="row ok"><span>Status</span><strong>✓ Skanning klar</strong></div>'+
+      '<div class="row"><span>Verk analyserade</span><strong>'+titles.length+'</strong></div>'+
+      '<div class="row"><span>Avvikelser funna</span><strong>'+issues.length+'</strong></div>'+
+      '<div class="row"><span>Hälsopoäng</span><strong>'+score+' / 100</strong></div>'+
+      '<div class="row"><span>Arbetsblad klart</span><strong style="color:#1dd4b7;">klicka "Ladda ner arbetsblad"</strong></div>', 'success');
 
     // Save for report generation
     const totalContribs = Object.values(works).reduce((s, w) => s + w.contribs.length, 0);
@@ -346,7 +347,7 @@ $('scanBtn').addEventListener('click', () => {
     $('generateReportBtn').disabled = false;
 
   } catch (e) {
-    status('<strong>✕ Error:</strong> ' + e.message, 'error');
+    status('<strong>✕ Fel:</strong> ' + e.message, 'error');
     console.error(e);
   }
 });
@@ -536,12 +537,12 @@ function buildHealthReport(scan) {
   const tagColor = tone === 'good' ? '#1dd4b7' : tone === 'warn' ? '#f2b36a' : '#f87171';
   const sectionH2Color = tone === 'good' ? '#1dd4b7' : tone === 'warn' ? '#f2b36a' : '#f87171';
   const scoreColor = tone === 'good' ? '#1dd4b7' : tone === 'warn' ? '#f2b36a' : '#f87171';
-  const tagText = tone === 'good' ? '✓ Pre-cleaning scan' : '⚠ Before cleaning';
+  const tagText = tone === 'good' ? '✓ För-rensning' : '⚠ För rensning';
   const heroH1 = tone === 'good'
-    ? 'Catalog largely CWR-ready'
+    ? 'Katalogen är i stort sett CWR-ready'
     : tone === 'warn'
-      ? 'Resolvable issues identified'
-      : 'Major Fixes Required — Catalog Not CWR-Ready';
+      ? 'Åtgärdbara avvikelser identifierade'
+      : 'Stora åtgärder krävs — katalog ej CWR-ready';
 
   // Group issues per work
   const byWork = {};
@@ -558,14 +559,14 @@ function buildHealthReport(scan) {
   }
 
   const fieldLabel = {
-    iswc: 'Missing ISWC',
-    isrc: 'Missing ISRC',
-    split_total: 'Incorrect split sums',
-    writer_ipi: 'Missing writer IPI',
-    society: 'Missing society',
-    foreign_writer: 'Foreign writer — no agreement declared',
-    role: 'Invalid role',
-    writer_name: 'Writer name variants',
+    iswc: 'Saknad ISWC',
+    isrc: 'Saknad ISRC',
+    split_total: 'Felaktiga andelsummor',
+    writer_ipi: 'Saknad upphovspersons-IPI',
+    society: 'Saknad sällskap',
+    foreign_writer: 'Utländsk upphovsperson — inget avtal angivet',
+    role: 'Ogiltig roll',
+    writer_name: 'Namnvarianter',
   };
 
   // Per-work table rows
@@ -573,14 +574,14 @@ function buildHealthReport(scan) {
     const workIssues = byWork[t] || [];
     const status = workIssues.length === 0 ? 'Clean' : 'Major fixes';
     const keyIssues = workIssues.map(i => {
-      if (i.field === 'split_total') return `splits ${i.current}`;
-      if (i.field === 'iswc') return 'missing ISWC';
-      if (i.field === 'isrc') return 'missing ISRC';
-      if (i.field === 'writer_ipi') return 'missing IPI';
-      if (i.field === 'society') return 'missing society';
-      if (i.field === 'foreign_writer') return 'no E/SE/AM declaration';
-      if (i.field === 'role') return 'invalid role';
-      if (i.field === 'writer_name') return 'name variant';
+      if (i.field === 'split_total') return `andelar ${i.current}`;
+      if (i.field === 'iswc') return 'saknad ISWC';
+      if (i.field === 'isrc') return 'saknad ISRC';
+      if (i.field === 'writer_ipi') return 'saknad IPI';
+      if (i.field === 'society') return 'saknad sällskap';
+      if (i.field === 'foreign_writer') return 'saknar E/SE/AM-deklaration';
+      if (i.field === 'role') return 'ogiltig roll';
+      if (i.field === 'writer_name') return 'namnvariant';
       return i.field;
     }).join(', ') || '—';
     const pillClass = workIssues.length === 0 ? 'pill clean' : 'pill major';
@@ -641,10 +642,10 @@ function buildHealthReport(scan) {
   const sPerWork = sectionN++;
 
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="sv">
 <head>
 <meta charset="UTF-8">
-<title>Metadata Health Report (Before Cleaning) — {{PartnerBrand}}</title>
+<title>Metadatahälsorapport (för rensning) — {{PartnerBrand}}</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background:#05070b; color:#f5f7fb; font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.55; -webkit-font-smoothing:antialiased; padding:32px 20px 64px; }
@@ -709,11 +710,11 @@ header.topnav { display:flex; align-items:center; justify-content:space-between;
 <div class="container">
 
   <header class="topnav">
-    <div class="brand">{{PartnerBrand}} · Metadata Health Report</div>
+    <div class="brand">{{PartnerBrand}} · Metadatahälsorapport</div>
     <div>
-      <div class="meta">Catalog: ${escapeHtml(titles.length)} works · ${escapeHtml(totalContribs)} contributor entries</div>
-      <div class="meta">Scan ID: ${escapeHtml(scanId)} · Generated ${escapeHtml(date)}</div>
-      <button class="print-btn" onclick="window.print()" style="margin-top:8px;">🖨 Print / Save as PDF</button>
+      <div class="meta">Katalog: ${escapeHtml(titles.length)} verk · ${escapeHtml(totalContribs)} upphovsposteringar</div>
+      <div class="meta">Scan-ID: ${escapeHtml(scanId)} · Genererad ${escapeHtml(date)}</div>
+      <button class="print-btn" onclick="window.print()" style="margin-top:8px;">🖨 Skriv ut / Spara som PDF</button>
     </div>
   </header>
 
@@ -721,7 +722,7 @@ header.topnav { display:flex; align-items:center; justify-content:space-between;
     <div class="hero-left">
       <span class="pre-tag">${tagText}</span>
       <h1>${heroH1}</h1>
-      <p>${titles.length} works analyzed · ${total} ${total === 1 ? 'issue' : 'issues'} detected · ${blocking} blocking · ${resolvable} resolvable · pre-cleaning diagnostic.</p>
+      <p>${titles.length} verk analyserade · ${total} ${total === 1 ? 'avvikelse' : 'avvikelser'} identifierade · ${blocking} blockerande · ${resolvable} åtgärdbara · för-rensningsdiagnostik.</p>
     </div>
     <div class="score-circle">
       <div class="score-num">${score}</div>
@@ -730,73 +731,73 @@ header.topnav { display:flex; align-items:center; justify-content:space-between;
   </div>
 
   <div class="summary-row">
-    <div class="summary-card gray"><div class="label">Works analyzed</div><div class="value">${titles.length}</div><div class="sub">${totalContribs} contributor entries</div></div>
-    <div class="summary-card gray"><div class="label">Total issues</div><div class="value">${total}</div><div class="sub">across the catalog</div></div>
-    <div class="summary-card red"><div class="label">Blocking</div><div class="value">${blocking}</div><div class="sub">prevent CWR submission</div></div>
-    <div class="summary-card amber"><div class="label">Resolvable</div><div class="value">${resolvable}</div><div class="sub">fixable with confirmation</div></div>
+    <div class="summary-card gray"><div class="label">Analyserade verk</div><div class="value">${titles.length}</div><div class="sub">${totalContribs} upphovsposteringar</div></div>
+    <div class="summary-card gray"><div class="label">Totala avvikelser</div><div class="value">${total}</div><div class="sub">i hela katalogen</div></div>
+    <div class="summary-card red"><div class="label">Blockerande</div><div class="value">${blocking}</div><div class="sub">hindrar CWR-inlämning</div></div>
+    <div class="summary-card amber"><div class="label">Åtgärdbara</div><div class="value">${resolvable}</div><div class="sub">kan korrigeras med bekräftelse</div></div>
   </div>
 
   <div class="section">
-    <h2>${sSummary}. High-level summary</h2>
-    <p class="lede">Pre-cleaning diagnostic. No assumptions, no auto-fixes. Every correction will require publisher confirmation.</p>
+    <h2>${sSummary}. Översikt</h2>
+    <p class="lede">För-rensningsdiagnostik. Inga antaganden, inga automatiska korrigeringar. Alla ändringar kräver uttrycklig bekräftelse från förlaget.</p>
     <div class="panel">
-      <div class="group-h">Most common problems</div>
-      <ul>${mostCommon || '<li class="green">No issues detected — catalog is in good shape.</li>'}</ul>
+      <div class="group-h">Vanligaste avvikelserna</div>
+      <ul>${mostCommon || '<li class="green">Inga avvikelser — katalogen är i gott skick.</li>'}</ul>
     </div>
   </div>
 
   <div class="section">
-    <h2>${sCoverage}. Identifier coverage</h2>
+    <h2>${sCoverage}. Identifierartäckning</h2>
     <div class="panel">
       <div class="group-h">ISWC</div>
       <ul>
-        <li class="${iswcMissing === 0 ? 'green' : 'amber'}">${iswcCovered} / ${titles.length} works have a valid ISWC</li>
-        ${iswcMissing > 0 ? `<li>${iswcMissing} ${iswcMissing === 1 ? 'work' : 'works'} flagged as "Unregistered Work — No ISWC found"</li>` : ''}
+        <li class="${iswcMissing === 0 ? 'green' : 'amber'}">${iswcCovered} / ${titles.length} verk har giltig ISWC</li>
+        ${iswcMissing > 0 ? `<li>${iswcMissing} ${iswcMissing === 1 ? 'verk' : 'verk'} flaggat som "Oregistrerat verk — ingen ISWC hittad"</li>` : ''}
       </ul>
       <div class="group-h">ISRC</div>
       <ul>
-        <li class="${isrcMissing === 0 ? 'green' : 'amber'}">${isrcCovered} / ${titles.length} works have a valid ISRC</li>
+        <li class="${isrcMissing === 0 ? 'green' : 'amber'}">${isrcCovered} / ${titles.length} verk har giltig ISRC</li>
       </ul>
       ${ipiIssues ? `<div class="group-h">IPI</div><ul>${ipiIssues}</ul>` : ''}
-      ${societyIssues ? `<div class="group-h">Society</div><ul>${societyIssues}</ul>` : ''}
+      ${societyIssues ? `<div class="group-h">Sällskap</div><ul>${societyIssues}</ul>` : ''}
     </div>
   </div>
 
   ${splitIssues ? `<div class="section">
-    <h2>${sSplit}. Share validation</h2>
-    <p class="lede">Incorrect split sums (blocking):</p>
+    <h2>${sSplit}. Andelsvalidering</h2>
+    <p class="lede">Felaktiga andelsummor (blockerande):</p>
     <div class="panel">
       <ul>${splitIssues}</ul>
-      <p class="impact-note">Impact: these works cannot be submitted to STIM/ICE until splits equal exactly 100%.</p>
+      <p class="impact-note">Konsekvens: dessa verk kan inte skickas till STIM/ICE förrän andelarna är exakt 100 %.</p>
     </div>
   </div>` : ''}
 
   ${(roleIssues || nameVariants || foreignWriter) ? `<div class="section">
-    <h2>${sRoleWriter}. Role &amp; writer validation</h2>
+    <h2>${sRoleWriter}. Validering av roller och upphovspersoner</h2>
     <div class="panel">
-      ${roleIssues ? `<div class="group-h">Invalid role</div><ul>${roleIssues}</ul>` : ''}
-      ${nameVariants ? `<div class="group-h">Name variants</div><ul>${nameVariants}</ul>` : ''}
-      ${foreignWriter ? `<div class="group-h">Foreign writer with no agreement</div><ul>${foreignWriter}</ul>` : ''}
+      ${roleIssues ? `<div class="group-h">Ogiltig roll</div><ul>${roleIssues}</ul>` : ''}
+      ${nameVariants ? `<div class="group-h">Namnvarianter</div><ul>${nameVariants}</ul>` : ''}
+      ${foreignWriter ? `<div class="group-h">Utländsk upphovsperson utan avtal</div><ul>${foreignWriter}</ul>` : ''}
     </div>
   </div>` : ''}
 
   <div class="section">
-    <h2>${sPerWork}. Per-work status</h2>
+    <h2>${sPerWork}. Status per verk</h2>
     <div class="works-table">
       <table>
-        <thead><tr><th>Work</th><th>Status</th><th>Key issues</th></tr></thead>
+        <thead><tr><th>Verk</th><th>Status</th><th>Nyckelavvikelser</th></tr></thead>
         <tbody>${workRows}</tbody>
       </table>
     </div>
   </div>
 
   <div class="disclaimer">
-    <div class="label">Publisher Confirmation Required</div>
-    <p>External metadata sources are used only to validate identifiers. All final decisions and catalog updates rest with the publisher.</p>
+    <div class="label">Förlagsbekräftelse krävs</div>
+    <p>Externa metadatakällor används endast för att validera identifierare. Alla slutliga beslut och kataloguppdateringar ligger hos förlaget.</p>
   </div>
 
   <p style="font-size:11px;color:#8f9bb3;text-align:center;margin-top:24px;">
-    {{PartnerBrand}} · Metadata compliance · {{PartnerContact}}
+    {{PartnerBrand}} · Metadataefterlevnad · {{PartnerContact}}
   </p>
 
 </div>
