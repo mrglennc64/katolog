@@ -17,19 +17,24 @@ nav a.active { font-weight: bold; color: #4ecdc4; }
 .lang-toggle a { color: #aaaaaa; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; text-decoration: none; margin: 0; }
 .lang-toggle a.active { background: #4ecdc4; color: #000000; }
 .lang-toggle a:hover:not(.active) { color: #ffffff; }
-.hero { padding: 60px 20px; text-align: center; max-width: 760px; margin: 0 auto; }
-.hero h1 { font-size: 28px; margin: 0 0 14px; font-weight: 600; }
-.hero p { color: #cccccc; margin: 0; }
-.info-block { padding: 24px 20px; max-width: 880px; margin: 0 auto; }
-.info-block h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: #4ecdc4; margin: 0 0 12px; }
+main { max-width: 1080px; margin: 0 auto; padding: 0 20px 60px; }
+.hero { padding: 56px 0 24px; max-width: 760px; }
+.hero h1 { font-size: 32px; margin: 0 0 14px; font-weight: 600; letter-spacing: -0.01em; }
+.hero p { color: #cccccc; margin: 0; font-size: 15px; }
+.info-block { padding: 24px 0; border-top: 1px solid #2a2a2a; }
+.info-block h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: #4ecdc4; margin: 0 0 14px; }
 .info-block p { color: #cccccc; margin: 0 0 8px; font-size: 14px; }
-table.pricing { width: 100%; border-collapse: collapse; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px; overflow: hidden; font-size: 14px; margin-top: 6px; }
-table.pricing th, table.pricing td { padding: 14px 18px; text-align: left; border-bottom: 1px solid #2a2a2a; }
-table.pricing th { background: #0f0f0f; font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
-table.pricing tr:last-child td { border-bottom: 0; }
-table.pricing td.tier { font-weight: 600; color: #ffffff; }
-table.pricing td.range { color: #aaaaaa; font-family: monospace; font-size: 13px; }
-table.pricing td.price { font-weight: 700; color: #4ecdc4; font-family: monospace; white-space: nowrap; text-align: right; }
+.tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 760px) { .tiers { grid-template-columns: 1fr; } }
+.tier { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; padding: 22px 24px; }
+.tier .name { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #4ecdc4; font-weight: 700; margin: 0 0 8px; }
+.tier .price { font-size: 26px; font-weight: 700; color: #ffffff; margin: 0 0 6px; line-height: 1.1; }
+.tier .price .unit { font-size: 13px; color: #aaaaaa; font-weight: 500; margin-left: 4px; }
+.tier .desc { font-size: 13px; color: #cccccc; margin: 0; }
+ul.checks { list-style: none; padding: 0; margin: 0; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px; }
+ul.checks li { padding: 14px 20px 14px 44px; border-bottom: 1px solid #2a2a2a; color: #cccccc; font-size: 14px; position: relative; }
+ul.checks li:last-child { border-bottom: 0; }
+ul.checks li::before { content: '·'; position: absolute; left: 22px; top: 11px; color: #4ecdc4; font-weight: 700; font-size: 22px; line-height: 1; }
 footer { background: #000; text-align: center; padding: 20px; font-size: 13px; color: #888; margin-top: 60px; }
 footer p { margin: 4px 0; }
 </style>
@@ -40,7 +45,7 @@ footer p { margin: 4px 0; }
 <header>
   <nav>
     <a href="index-en.html">Start</a>
-    <a href="validate-en.html">Validation</a>
+    <a href="/app/kataloghub">Validation</a>
     <a href="faq-en.html">FAQ</a>
     <a href="pricing-en.html" class="active">Pricing</a>
     <a href="contact-en.html">Contact</a>
@@ -54,35 +59,46 @@ footer p { margin: 4px 0; }
 <main>
 
   <section class="hero">
-    <h1>Pricing</h1>
-    <p>Validation of a catalog file in CSV format. Fixed price based on catalog size.</p>
+    <h1>Monthly subscription</h1>
+    <p>Kataloghub is a file-based validation and health reporting portal. No system access, no ingestion, no integrations.</p>
   </section>
 
   <section class="info-block">
-    <h2>Catalog Validation (fixed price)</h2>
-    <p>Validation of a catalog file in CSV format. PDF report and CSV dataset included.</p>
-    <table class="pricing">
-      <thead>
-        <tr><th>Tier</th><th>Volume</th><th style="text-align:right;">Price</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="tier">Small catalog</td><td class="range">0 – 500 works</td><td class="price">999 SEK</td></tr>
-        <tr><td class="tier">Medium catalog</td><td class="range">501 – 2,000 works</td><td class="price">2,499 SEK</td></tr>
-        <tr><td class="tier">Large catalog</td><td class="range">2,001 – 10,000 works</td><td class="price">7,999 SEK</td></tr>
-        <tr><td class="tier">Enterprise</td><td class="range">10,000+ works</td><td class="price">Quote</td></tr>
-      </tbody>
-    </table>
+    <h2>Plans</h2>
+    <div class="tiers">
+      <div class="tier">
+        <p class="name">Lite</p>
+        <p class="price">2,000 SEK<span class="unit">/ month</span></p>
+        <p class="desc">For smaller catalogs and teams.</p>
+      </div>
+      <div class="tier">
+        <p class="name">Standard</p>
+        <p class="price">3,500 SEK<span class="unit">/ month</span></p>
+        <p class="desc">For mid-size publishers.</p>
+      </div>
+      <div class="tier">
+        <p class="name">Enterprise</p>
+        <p class="price">5,000 SEK<span class="unit">/ month</span></p>
+        <p class="desc">For large catalogs and multi-team setups.</p>
+      </div>
+    </div>
   </section>
 
   <section class="info-block">
-    <h2>About the model</h2>
-    <p>Pricing is based on catalog size and validation scope.</p>
-    <p>No integration. No automation. No system access.</p>
+    <h2>All plans include</h2>
+    <ul class="checks">
+      <li>Catalog upload and validation</li>
+      <li>Health reports and discrepancy overviews</li>
+      <li>Worksheet generation (CSV)</li>
+      <li>Export files for internal review</li>
+      <li>File-based, zero-trust workflow</li>
+      <li>Full traceability per upload</li>
+    </ul>
   </section>
 
   <section class="info-block">
     <h2>Corrections</h2>
-    <p>Corrections are handled via <a href="https://heyroya.se/pages/pricing.en.html" style="color:#4ecdc4;text-decoration:underline;">HeyRoya</a>. See separate page for pricing.</p>
+    <p>Corrections are handled separately via <a href="https://heyroya.se/pages/pricing.en.html" style="color:#4ecdc4;text-decoration:underline;">HeyRoya</a> and are not included in Kataloghub.</p>
   </section>
 
 </main>

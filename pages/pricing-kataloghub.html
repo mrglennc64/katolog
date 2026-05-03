@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kataloghub — Priser</title>
-<meta name="description" content="Validering av katalogfil i CSV-format. Fast pris baserat på katalogstorlek. Inga korrigeringar i tjänsten.">
+<meta name="description" content="Filbaserad portal för validering och hälsorapporter. Månadsabonnemang. Ingen systemåtkomst, ingen ingestion, inga integrationer.">
 <style>
   * { box-sizing: border-box; }
   body { background: #050505; color: #f5f5f5; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; line-height: 1.55; }
@@ -21,23 +21,28 @@
   .lang-toggle a.active { background: #1f7a3a; color: #ffffff; }
   .lang-toggle a:hover:not(.active) { color: #ffffff; }
 
-  main { max-width: 880px; margin: 0 auto; padding: 0 24px 64px; }
+  main { max-width: 1080px; margin: 0 auto; padding: 0 24px 64px; }
   section.hero { padding: 56px 0 24px; }
-  section.hero h1 { font-size: 28px; font-weight: 600; margin: 0 0 12px; letter-spacing: -0.01em; }
-  section.hero p { color: #cccccc; font-size: 15px; margin: 0; }
+  section.hero h1 { font-size: 32px; font-weight: 600; margin: 0 0 12px; letter-spacing: -0.01em; }
+  section.hero p { color: #cccccc; font-size: 15px; margin: 0; max-width: 760px; }
 
   section { padding: 24px 0; }
   section.divider { border-top: 1px solid #222; }
-  section h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: #1f7a3a; font-weight: 700; margin: 0 0 12px; }
-  section p.intro { color: #cccccc; font-size: 14px; margin: 0 0 16px; max-width: 720px; }
+  section h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: #1f7a3a; font-weight: 700; margin: 0 0 14px; }
+  section p.intro { color: #cccccc; font-size: 14px; margin: 0 0 20px; max-width: 760px; }
 
-  table.pricing { width: 100%; border-collapse: collapse; background: #101010; border: 1px solid #222; border-radius: 6px; overflow: hidden; font-size: 14px; }
-  table.pricing th, table.pricing td { padding: 14px 18px; text-align: left; border-bottom: 1px solid #222; }
-  table.pricing th { background: #0a0a0a; font-size: 11px; color: #8f9bb3; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
-  table.pricing tr:last-child td { border-bottom: 0; }
-  table.pricing td.tier { font-weight: 600; color: #ffffff; }
-  table.pricing td.range { color: #aaaaaa; font-family: monospace; font-size: 13px; }
-  table.pricing td.price { font-weight: 700; color: #6dbe85; font-family: monospace; white-space: nowrap; text-align: right; }
+  .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 760px) { .tiers { grid-template-columns: 1fr; } }
+  .tier { background: #101010; border: 1px solid #222; border-radius: 8px; padding: 22px 24px; }
+  .tier .name { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: #6dbe85; font-weight: 700; margin: 0 0 8px; }
+  .tier .price { font-size: 26px; font-weight: 700; color: #ffffff; margin: 0 0 6px; line-height: 1.1; }
+  .tier .price .unit { font-size: 13px; color: #aaaaaa; font-weight: 500; margin-left: 4px; }
+  .tier .desc { font-size: 13px; color: #cccccc; margin: 0; }
+
+  ul.checks { list-style: none; padding: 0; margin: 0; background: #101010; border: 1px solid #222; border-radius: 6px; }
+  ul.checks li { padding: 14px 20px 14px 44px; border-bottom: 1px solid #222; color: #cccccc; font-size: 14px; position: relative; }
+  ul.checks li:last-child { border-bottom: 0; }
+  ul.checks li::before { content: '·'; position: absolute; left: 22px; top: 11px; color: #1f7a3a; font-weight: 700; font-size: 22px; line-height: 1; }
 
   .info-card { background: #101010; border: 1px solid #222; border-radius: 6px; padding: 18px 22px; }
   .info-card p { color: #cccccc; font-size: 14px; margin: 0 0 6px; }
@@ -57,7 +62,7 @@
   </div>
   <nav class="primary">
     <a href="index.html">Start</a>
-    <a href="validera.html">Validering</a>
+    <a href="/app/kataloghub">Validering</a>
     <a href="faq.html">FAQ</a>
     <a href="pricing-kataloghub.html" class="active">Priser</a>
     <a href="contact.html">Kontakt</a>
@@ -71,38 +76,47 @@
 <main>
 
   <section class="hero">
-    <h1>Priser</h1>
-    <p>Validering av katalogfil i CSV-format. Fast pris baserat på katalogstorlek.</p>
+    <h1>Månadsabonnemang</h1>
+    <p>Kataloghub är en filbaserad portal för validering och hälsorapporter. Ingen systemåtkomst, ingen ingestion, inga integrationer.</p>
   </section>
 
   <section class="divider">
-    <h2>Kataloggranskning (fast pris)</h2>
-    <p class="intro">Validering av katalogfil i CSV-format. PDF-rapport och CSV-underlag ingår.</p>
-    <table class="pricing">
-      <thead>
-        <tr><th>Nivå</th><th>Volym</th><th style="text-align:right;">Pris</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="tier">Liten katalog</td><td class="range">0 – 500 verk</td><td class="price">999 SEK</td></tr>
-        <tr><td class="tier">Mellan katalog</td><td class="range">501 – 2 000 verk</td><td class="price">2 499 SEK</td></tr>
-        <tr><td class="tier">Stor katalog</td><td class="range">2 001 – 10 000 verk</td><td class="price">7 999 SEK</td></tr>
-        <tr><td class="tier">Enterprise</td><td class="range">10 000+ verk</td><td class="price">Offert</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section class="divider">
-    <h2>Om modellen</h2>
-    <div class="info-card">
-      <p>Priserna baseras på katalogstorlek och omfattning av valideringen.</p>
-      <p>Ingen integration. Ingen automatisering. Ingen systemåtkomst.</p>
+    <h2>Nivåer</h2>
+    <div class="tiers">
+      <div class="tier">
+        <p class="name">Lite</p>
+        <p class="price">2 000 SEK<span class="unit">/ månad</span></p>
+        <p class="desc">För mindre kataloger och team.</p>
+      </div>
+      <div class="tier">
+        <p class="name">Standard</p>
+        <p class="price">3 500 SEK<span class="unit">/ månad</span></p>
+        <p class="desc">För medelstora förlag.</p>
+      </div>
+      <div class="tier">
+        <p class="name">Enterprise</p>
+        <p class="price">5 000 SEK<span class="unit">/ månad</span></p>
+        <p class="desc">För större kataloger och flera team.</p>
+      </div>
     </div>
+  </section>
+
+  <section class="divider">
+    <h2>Alla nivåer inkluderar</h2>
+    <ul class="checks">
+      <li>Uppladdning och validering av kataloger</li>
+      <li>Hälsorapporter och avvikelseöversikter</li>
+      <li>Arbetsblad (CSV)</li>
+      <li>Exportfiler för intern granskning</li>
+      <li>Filbaserat, zero-trust-flöde</li>
+      <li>Full spårbarhet per uppladdning</li>
+    </ul>
   </section>
 
   <section class="divider">
     <h2>Korrigering</h2>
     <div class="info-card">
-      <p>Korrigering utförs via <a href="https://heyroya.se/pages/pricing.html" style="color:#6dbe85;text-decoration:underline;">HeyRoya</a>. Se separat sida för priser.</p>
+      <p>Korrigering av metadata utförs separat via <a href="https://heyroya.se/pages/pricing.html" style="color:#6dbe85;text-decoration:underline;">HeyRoya</a> och ingår inte i Kataloghub.</p>
     </div>
   </section>
 
