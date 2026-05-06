@@ -325,5 +325,22 @@
 
 </main>
 
+<footer style="color:rgba(255,255,255,0.6);font-size:12px;text-align:center;padding:20px 16px;margin-top:48px;background:rgba(8,17,32,0.6);border-top:1px solid rgba(255,255,255,0.1);">
+  <p style="margin:4px 0;">Kataloghub drivs som en filbaserad valideringstjänst för katalogmetadata. Filer lagras inte efter leverans. Korrigeringar hanteras via partner HeyRoya.</p>
+  <p style="margin:4px 0;font-size:11px;opacity:0.7;">Lanserad maj 2026 · <a href="om-oss.html" style="color:inherit;text-decoration:underline;">Om oss</a></p>
+</footer>
+
+<!-- src-guard:v1 -->
+<script>
+(function(){
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); }, false);
+  document.addEventListener('keydown', function(e){
+    var k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) { e.preventDefault(); return false; }
+  }, false);
+})();
+</script>
 </body>
 </html>

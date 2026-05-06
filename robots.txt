@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /pages/portal.html
+Disallow: /pages.min/portal.html
+Disallow: /portal.html
+Disallow: /portal/
+Disallow: /portal
+
+# Note: Wayback Machine / archive.org no longer honors robots.txt (since 2017).
+# To prevent archival of operator pages, gate them behind HTTP auth at the
+# nginx layer or submit a manual exclusion request to archive.org.

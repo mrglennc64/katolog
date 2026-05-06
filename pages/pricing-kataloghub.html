@@ -42,9 +42,22 @@
   ul.checks li:last-child { border-bottom: 0; }
   ul.checks li::before { content: '·'; position: absolute; left: 22px; top: 11px; color: #1f7a3a; font-weight: 700; font-size: 22px; line-height: 1; }
 
+  ul.excludes { list-style: none; padding: 0; margin: 0; background: #101010; border: 1px solid #222; border-radius: 6px; }
+  ul.excludes li { padding: 14px 20px 14px 44px; border-bottom: 1px solid #222; color: #cccccc; font-size: 14px; position: relative; }
+  ul.excludes li:last-child { border-bottom: 0; }
+  ul.excludes li::before { content: '×'; position: absolute; left: 22px; top: 12px; color: #888; font-weight: 700; font-size: 16px; line-height: 1; }
+
   .info-card { background: #101010; border: 1px solid #222; border-radius: 6px; padding: 18px 22px; }
   .info-card p { color: #cccccc; font-size: 14px; margin: 0 0 6px; }
   .info-card p:last-child { margin-bottom: 0; }
+
+  table.pricing-table tr.popular { background: #0e1a12; }
+  .badge-popular { display: inline-block; margin-left: 10px; padding: 2px 8px; border-radius: 999px; background: #1f7a3a; color: #ffffff; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; vertical-align: middle; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+
+  .cta-block { padding: 28px 0 4px; text-align: center; }
+  .cta-block p { color: #cccccc; font-size: 14px; margin: 0 0 14px; }
+  .btn-primary { display: inline-block; background: #1f7a3a; color: #ffffff !important; padding: 12px 22px; border-radius: 999px; font-size: 14px; font-weight: 700; letter-spacing: 0.02em; }
+  .btn-primary:hover { background: #2a9249; }
 
   footer.foot { color: #888; font-size: 12px; text-align: center; padding: 24px; border-top: 1px solid #222; margin-top: 32px; }
   footer.foot p { margin: 4px 0; }
@@ -86,7 +99,7 @@
       </thead>
       <tbody>
         <tr><td>0–500 verk</td><td class="num">2 000 SEK</td><td>Inträdesnivå, fullt funktionell</td></tr>
-        <tr><td>501–2 000 verk</td><td class="num">3 500 SEK</td><td>Medelstort förlag</td></tr>
+        <tr class="popular"><td>501–2 000 verk <span class="badge-popular">Mest vald</span></td><td class="num">3 500 SEK</td><td>Medelstort förlag</td></tr>
         <tr><td>2 001–10 000 verk</td><td class="num">5 000 SEK</td><td>Distributör / större förlag</td></tr>
         <tr><td>10 000+ verk</td><td class="num">Offert</td><td>Enterprise</td></tr>
       </tbody>
@@ -107,16 +120,28 @@
   </section>
 
   <section class="divider">
-    <h2>Korrigering</h2>
-    <div class="info-card">
-      <p>Korrigering av metadata utförs separat via <a href="https://heyroya.se/pages/pricing.html" style="color:#6dbe85;text-decoration:underline;">HeyRoya</a> och ingår inte i Kataloghub.</p>
+    <h2>Vad ingår inte</h2>
+    <ul class="excludes">
+      <li>Korrigering av fel — utförs i <a href="https://heyroya.se/pages/pricing.html" style="color:#6dbe85;text-decoration:underline;">HeyRoya</a></li>
+      <li>CWR-generering — utförs i HeyRoya</li>
+      <li>Ingestion eller leverans till DSP / sällskap</li>
+      <li>Systemintegration eller API-åtkomst</li>
+      <li>Royalty- eller utbetalningshantering</li>
+    </ul>
+  </section>
+
+  <section class="divider">
+    <div class="cta-block">
+      <p>Inga bindningstider. Börja med en validering.</p>
+      <a class="btn-primary" href="/app/kataloghub">Börja med validering i Kataloghub ›</a>
     </div>
   </section>
 
 </main>
 
 <footer class="foot">
-  <p>Kataloghub – Filbaserad validering av katalogmetadata. Filer lagras inte efter leverans.</p>
+  <p>Kataloghub drivs som en filbaserad valideringstjänst för katalogmetadata. Filer lagras inte efter leverans. Korrigeringar hanteras via partner HeyRoya.</p>
+  <p style="font-size:11px;opacity:0.7;">Lanserad maj 2026 · <a href="om-oss.html" style="color:inherit;text-decoration:underline;">Om oss</a></p>
 </footer>
 
 <!-- src-guard:v1 -->

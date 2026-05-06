@@ -5,106 +5,7 @@
 <title>{{PartnerBrand}} — Validering av katalogfil</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="Filbaserad kontroll av struktur, identifierare och format. Ingen integration. Ingen automatisering.">
-<style>
-  * { box-sizing: border-box; }
-  body {
-    background: #050505;
-    color: #f5f5f5;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-    margin: 0; padding: 0;
-    line-height: 1.55;
-  }
-  a { color: inherit; text-decoration: none; }
-
-  header.topnav { max-width: 1100px; margin: 0 auto; padding: 18px 24px 14px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid #222; }
-  .brand { display: flex; align-items: center; gap: 0.65rem; }
-  .brand-mark { width: 24px; height: 24px; border-radius: 999px; background: radial-gradient(circle at 30% 20%, #cfeed9 0, #1f7a3a 40%, #0c3f1d 100%); }
-  .brand-text { font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; font-size: 12px; color: #aaaaaa; }
-  nav.primary { display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; font-size: 13px; color: #aaaaaa; }
-  nav.primary a:hover, nav.primary a.active { color: #ffffff; }
-  .lang-toggle { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; border: 1px solid #2a2a2a; margin-left: 12px; }
-  .lang-toggle a { color: #aaaaaa; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; text-decoration: none; margin: 0; }
-  .lang-toggle a.active { background: #1f7a3a; color: #ffffff; }
-  .lang-toggle a:hover:not(.active) { color: #ffffff; }
-
-  main { max-width: 880px; margin: 0 auto; padding: 0 24px 64px; }
-
-  section.hero { padding: 56px 0 24px; }
-  section.hero h1 { font-size: 28px; font-weight: 600; margin: 0 0 12px; letter-spacing: -0.01em; }
-  section.hero p.lede { color: #cccccc; font-size: 15px; margin: 0; }
-
-  section { padding: 24px 0; }
-  section.divider { border-top: 1px solid #222; }
-  section h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: #1f7a3a; font-weight: 700; margin: 0 0 12px; }
-
-  .upload-card { background: #101010; border: 1px solid #222; border-radius: 6px; padding: 20px 22px; }
-  .upload-card p.req { font-size: 13px; color: #cccccc; margin: 0 0 16px; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
-  .upload-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .file-label { display: inline-block; padding: 8px 16px; border-radius: 4px; border: 1px solid #2f2f2f; background: #181818; color: #f5f5f5; cursor: pointer; font-size: 14px; }
-  .file-label:hover { border-color: #444; }
-  #file-name { font-size: 13px; color: #888; }
-  .btn-primary { display: inline-block; padding: 10px 22px; border-radius: 4px; background: #1f7a3a; border: 1px solid #1f7a3a; color: #ffffff; font-size: 14px; font-weight: 600; cursor: pointer; margin-left: auto; font-family: inherit; }
-  .btn-primary:hover:not(:disabled) { background: #249245; }
-  .btn-primary:disabled { background: #2a2a2a; border-color: #2a2a2a; color: #777; cursor: not-allowed; }
-
-  ul.checks { list-style: none; padding: 0; margin: 0; background: #101010; border: 1px solid #222; border-radius: 6px; }
-  ul.checks li { padding: 14px 20px 14px 44px; border-bottom: 1px solid #222; color: #cccccc; font-size: 14px; position: relative; }
-  ul.checks li:last-child { border-bottom: 0; }
-  ul.checks li::before { content: '·'; position: absolute; left: 22px; top: 11px; color: #1f7a3a; font-weight: 700; font-size: 22px; line-height: 1; }
-
-  .status { margin-top: 16px; padding: 14px 18px; border: 1px solid #222; border-radius: 6px; background: #101010; font-size: 13px; color: #cccccc; }
-  .status.error { border-color: #7a2828; color: #f3a3a3; }
-  .status.success { border-color: #1f7a3a; color: #b6e2c4; }
-  .status.blocked { border-color: #7a2828; color: #f3a3a3; }
-  .status .row { display: flex; justify-content: space-between; padding: 2px 0; }
-  .status .row strong { color: #ffffff; }
-  .status .code { display: inline-block; font-family: monospace; font-size: 11px; color: #aaaaaa; margin-left: 0.5rem; padding: 1px 8px; border: 1px solid #2f2f2f; border-radius: 999px; }
-
-  .actions { margin-top: 14px; display: flex; gap: 12px; flex-wrap: wrap; }
-
-  .issues-table { margin-top: 16px; background: #101010; border: 1px solid #222; border-radius: 6px; overflow: hidden; }
-  .issues-table .issues-header { padding: 12px 16px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #1f7a3a; font-weight: 700; }
-  .issues-table .issues-header .count { color: #aaaaaa; font-family: monospace; }
-  .issues-table table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .issues-table th, .issues-table td { text-align: left; padding: 8px 14px; border-bottom: 1px solid #222; color: #cccccc; }
-  .issues-table tr:last-child td { border-bottom: 0; }
-  .issues-table th { background: #0a0a0a; font-size: 10px; color: #8f9bb3; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
-  .issues-table td.wid { color: #6dbe85; font-family: monospace; font-size: 12px; }
-  .issues-table td.field { color: #6dbe85; font-family: monospace; font-size: 12px; }
-  .issues-table td.original { font-family: monospace; font-size: 12px; color: #aaaaaa; }
-  .issues-table .pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-family: monospace; }
-  .issues-table .pill.invalid { background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.4); }
-  .issues-table .pill.missing { background: rgba(242,179,106,0.12); color: #f2b36a; border: 1px solid rgba(242,179,106,0.4); }
-
-  .cov-section { margin-top: 16px; }
-  .cov-section-header { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #1f7a3a; font-weight: 700; margin-bottom: 10px; }
-  .cov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
-  .cov { background: #101010; border: 1px solid #222; border-radius: 6px; padding: 12px 14px; }
-  .cov-label { font-size: 11px; color: #aaaaaa; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
-  .cov-bar { height: 6px; background: #222; border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
-  .cov-fill { height: 6px; background: #1f7a3a; border-radius: 3px; transition: width 0.3s ease; }
-  .cov-fill.amber { background: #a86c20; }
-  .cov-fill.red { background: #c43838; }
-  .cov-text { font-size: 12px; color: #cccccc; font-family: monospace; }
-
-  .works-section { margin-top: 16px; background: #101010; border: 1px solid #222; border-radius: 6px; overflow: hidden; }
-  .works-section-header { padding: 12px 16px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #1f7a3a; font-weight: 700; }
-  .works-section-header .count { color: #aaaaaa; font-family: monospace; }
-  .works-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .works-table th, .works-table td { text-align: left; padding: 8px 14px; border-bottom: 1px solid #222; color: #cccccc; }
-  .works-table tr:last-child td { border-bottom: 0; }
-  .works-table th { background: #0a0a0a; font-size: 10px; color: #8f9bb3; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 700; }
-  .works-table td.wid { color: #6dbe85; font-family: monospace; font-size: 12px; }
-  .works-table .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
-  .works-table .pill.clean { background: rgba(31,122,58,0.15); color: #6dbe85; border: 1px solid rgba(31,122,58,0.4); }
-  .works-table .pill.major { background: rgba(196,56,56,0.15); color: #f87171; border: 1px solid rgba(196,56,56,0.4); }
-  .btn-secondary { display: inline-block; padding: 10px 18px; border-radius: 4px; background: transparent; border: 1px solid #2f2f2f; color: #f5f5f5; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; }
-  .btn-secondary:hover { border-color: #444; }
-
-  footer.foot { color: #888; font-size: 12px; text-align: center; padding: 24px; border-top: 1px solid #222; margin-top: 32px; }
-  footer.foot p { margin: 4px 0; }
-  footer.foot a { color: #aaaaaa; }
-</style>
+<style>*{box-sizing:border-box;}body{background:#050505;color:#f5f5f5;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;margin:0;padding:0;line-height:1.55;}a{color:inherit;text-decoration:none;}header.topnav{max-width:1100px;margin:0 auto;padding:18px 24px 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;border-bottom:1px solid #222;}.brand{display:flex;align-items:center;gap:0.65rem;}.brand-mark{width:24px;height:24px;border-radius:999px;background:radial-gradient(circle at 30% 20%,#cfeed9 0,#1f7a3a 40%,#0c3f1d 100%);}.brand-text{font-weight:600;letter-spacing:0.06em;text-transform:uppercase;font-size:12px;color:#aaaaaa;}nav.primary{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;font-size:13px;color:#aaaaaa;}nav.primary a:hover,nav.primary a.active{color:#ffffff;}.lang-toggle{display:inline-flex;gap:4px;padding:4px;border-radius:999px;border:1px solid #2a2a2a;margin-left:12px;}.lang-toggle a{color:#aaaaaa;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:700;text-decoration:none;margin:0;}.lang-toggle a.active{background:#1f7a3a;color:#ffffff;}.lang-toggle a:hover:not(.active){color:#ffffff;}main{max-width:880px;margin:0 auto;padding:0 24px 64px;}section.hero{padding:56px 0 24px;}section.hero h1{font-size:28px;font-weight:600;margin:0 0 12px;letter-spacing:-0.01em;}section.hero p.lede{color:#cccccc;font-size:15px;margin:0;}section{padding:24px 0;}section.divider{border-top:1px solid #222;}section h2{font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:#1f7a3a;font-weight:700;margin:0 0 12px;}.upload-card{background:#101010;border:1px solid #222;border-radius:6px;padding:20px 22px;}.upload-card p.req{font-size:13px;color:#cccccc;margin:0 0 16px;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;}.upload-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}.file-label{display:inline-block;padding:8px 16px;border-radius:4px;border:1px solid #2f2f2f;background:#181818;color:#f5f5f5;cursor:pointer;font-size:14px;}.file-label:hover{border-color:#444;}#file-name{font-size:13px;color:#888;}.btn-primary{display:inline-block;padding:10px 22px;border-radius:4px;background:#1f7a3a;border:1px solid #1f7a3a;color:#ffffff;font-size:14px;font-weight:600;cursor:pointer;margin-left:auto;font-family:inherit;}.btn-primary:hover:not(:disabled){background:#249245;}.btn-primary:disabled{background:#2a2a2a;border-color:#2a2a2a;color:#777;cursor:not-allowed;}ul.checks{list-style:none;padding:0;margin:0;background:#101010;border:1px solid #222;border-radius:6px;}ul.checks li{padding:14px 20px 14px 44px;border-bottom:1px solid #222;color:#cccccc;font-size:14px;position:relative;}ul.checks li:last-child{border-bottom:0;}ul.checks li::before{content:'·';position:absolute;left:22px;top:11px;color:#1f7a3a;font-weight:700;font-size:22px;line-height:1;}.status{margin-top:16px;padding:14px 18px;border:1px solid #222;border-radius:6px;background:#101010;font-size:13px;color:#cccccc;}.status.error{border-color:#7a2828;color:#f3a3a3;}.status.success{border-color:#1f7a3a;color:#b6e2c4;}.status.blocked{border-color:#7a2828;color:#f3a3a3;}.status .row{display:flex;justify-content:space-between;padding:2px 0;}.status .row strong{color:#ffffff;}.status .code{display:inline-block;font-family:monospace;font-size:11px;color:#aaaaaa;margin-left:0.5rem;padding:1px 8px;border:1px solid #2f2f2f;border-radius:999px;}.actions{margin-top:14px;display:flex;gap:12px;flex-wrap:wrap;}.issues-table{margin-top:16px;background:#101010;border:1px solid #222;border-radius:6px;overflow:hidden;}.issues-table .issues-header{padding:12px 16px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#1f7a3a;font-weight:700;}.issues-table .issues-header .count{color:#aaaaaa;font-family:monospace;}.issues-table table{width:100%;border-collapse:collapse;font-size:13px;}.issues-table th,.issues-table td{text-align:left;padding:8px 14px;border-bottom:1px solid #222;color:#cccccc;}.issues-table tr:last-child td{border-bottom:0;}.issues-table th{background:#0a0a0a;font-size:10px;color:#8f9bb3;text-transform:uppercase;letter-spacing:0.06em;font-weight:700;}.issues-table td.wid{color:#6dbe85;font-family:monospace;font-size:12px;}.issues-table td.field{color:#6dbe85;font-family:monospace;font-size:12px;}.issues-table td.original{font-family:monospace;font-size:12px;color:#aaaaaa;}.issues-table .pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;font-family:monospace;}.issues-table .pill.invalid{background:rgba(248,113,113,0.12);color:#f87171;border:1px solid rgba(248,113,113,0.4);}.issues-table .pill.missing{background:rgba(242,179,106,0.12);color:#f2b36a;border:1px solid rgba(242,179,106,0.4);}.cov-section{margin-top:16px;}.cov-section-header{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#1f7a3a;font-weight:700;margin-bottom:10px;}.cov-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;}.cov{background:#101010;border:1px solid #222;border-radius:6px;padding:12px 14px;}.cov-label{font-size:11px;color:#aaaaaa;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;}.cov-bar{height:6px;background:#222;border-radius:3px;overflow:hidden;margin-bottom:8px;}.cov-fill{height:6px;background:#1f7a3a;border-radius:3px;transition:width 0.3s ease;}.cov-fill.amber{background:#a86c20;}.cov-fill.red{background:#c43838;}.cov-text{font-size:12px;color:#cccccc;font-family:monospace;}.works-section{margin-top:16px;background:#101010;border:1px solid #222;border-radius:6px;overflow:hidden;}.works-section-header{padding:12px 16px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:#1f7a3a;font-weight:700;}.works-section-header .count{color:#aaaaaa;font-family:monospace;}.works-table{width:100%;border-collapse:collapse;font-size:13px;}.works-table th,.works-table td{text-align:left;padding:8px 14px;border-bottom:1px solid #222;color:#cccccc;}.works-table tr:last-child td{border-bottom:0;}.works-table th{background:#0a0a0a;font-size:10px;color:#8f9bb3;text-transform:uppercase;letter-spacing:0.06em;font-weight:700;}.works-table td.wid{color:#6dbe85;font-family:monospace;font-size:12px;}.works-table .pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;}.works-table .pill.clean{background:rgba(31,122,58,0.15);color:#6dbe85;border:1px solid rgba(31,122,58,0.4);}.works-table .pill.major{background:rgba(196,56,56,0.15);color:#f87171;border:1px solid rgba(196,56,56,0.4);}.btn-secondary{display:inline-block;padding:10px 18px;border-radius:4px;background:transparent;border:1px solid #2f2f2f;color:#f5f5f5;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;}.btn-secondary:hover{border-color:#444;}footer.foot{color:#888;font-size:12px;text-align:center;padding:24px;border-top:1px solid #222;margin-top:32px;}footer.foot p{margin:4px 0;}footer.foot a{color:#aaaaaa;}</style>
 </head>
 <body>
 
@@ -198,24 +99,19 @@
   <p style="font-size:11px;opacity:0.7;">Lanserad maj 2026 · <a href="om-oss.html" style="color:inherit;text-decoration:underline;">Om oss</a></p>
 </footer>
 
-<script>
-window.KATALOGHUB_TIER_CONFIG = window.KATALOGHUB_TIER_CONFIG || { maxWorksPerValidation: 1000, maxValidationsPerPeriod: 1, maxCatalogsPerPeriod: 1 };
+<script>window.KATALOGHUB_TIER_CONFIG = window.KATALOGHUB_TIER_CONFIG || { maxWorksPerValidation: 1000, maxValidationsPerPeriod: 1, maxCatalogsPerPeriod: 1 };
 window.KATALOGHUB_USAGE_STATE = window.KATALOGHUB_USAGE_STATE || { validationsThisPeriod: 0, catalogsThisPeriod: 0, userId: null };
-
 var TIER_MESSAGES = {
   OK: 'Validering kan genomföras.',
   LIMIT_WORKS: 'Valideringen kan inte genomföras. Antalet verk överstiger avtalad nivå.',
   LIMIT_VALIDATIONS: 'Valideringsgränsen för perioden är uppnådd. Uppdatering av avtal krävs.',
   LIMIT_CATALOGS: 'Antalet kataloger överstiger avtalad nivå. Kontakta HeyRoya för justering.'
 };
-
 function $(id) { return document.getElementById(id); }
 function escapeHtml(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; }); }
 function csvEscape(v) { v = (v == null) ? '' : String(v); if (/[",\n]/.test(v)) return '"' + v.replace(/"/g, '""') + '"'; return v; }
 function setStatus(html, cls) { var s = $('status'); s.style.display = 'block'; s.className = 'status' + (cls ? ' ' + cls : ''); s.innerHTML = html; }
-
 var FOREIGN_SOCIETIES = { TONO:1, GEMA:1, SACEM:1, PRS:1, BMI:1, ASCAP:1, SOCAN:1, ICE:1, MLC:1, SIAE:1, BUMA:1, SUISA:1, ZAIKS:1, AKM:1, AUSTRO:1, SABAM:1, SACM:1, SADAIC:1, APRA:1, JASRAC:1 };
-
 function parseCsv(text) {
   var rows = [];
   var lines = text.replace(/\r\n/g, '\n').split('\n');
@@ -239,18 +135,13 @@ function parseCsv(text) {
   if (rows.length === 0) throw new Error('Filen saknar data.');
   var header = rows[0].map(function(h){ return h.trim().toLowerCase(); });
   var dataRows = rows.slice(1);
-
-  function hasAll(cols) { for (var i = 0; i < cols.length; i++) if (header.indexOf(cols[i]) < 0) return false; return true; }
+function hasAll(cols) { for (var i = 0; i < cols.length; i++) if (header.indexOf(cols[i]) < 0) return false; return true; }
   function val(cols, name) { var i = header.indexOf(name); return (i >= 0 && cols[i] != null) ? cols[i].trim() : ''; }
-
-  var newRequired = ['work_id','title','writer_name','writer_ipi','role_code','share','agreement_type','iswc','isrc'];
+var newRequired = ['work_id','title','writer_name','writer_ipi','role_code','share','agreement_type','iswc','isrc'];
   if (hasAll(newRequired)) {
     return dataRows.map(function(cols){ var o = {}; for (var hi = 0; hi < header.length; hi++) o[header[hi]] = (cols[hi] != null ? cols[hi] : '').trim(); return o; });
   }
-
-  // Legacy 8-column schema auto-detect: title, name, role, share_percent, ipi (+ optional iswc/isrc/society).
-  // Auto-converts to the new 9-column schema in memory before validation.
-  var legacyRequired = ['title','name','role','share_percent','ipi'];
+var legacyRequired = ['title','name','role','share_percent','ipi'];
   if (hasAll(legacyRequired)) {
     var workIdMap = {};
     var nextId = 1;
@@ -272,14 +163,11 @@ function parseCsv(text) {
       };
     });
   }
-
-  // Neither schema matched — report the first new-schema column missing.
-  for (var ri = 0; ri < newRequired.length; ri++) {
+for (var ri = 0; ri < newRequired.length; ri++) {
     if (header.indexOf(newRequired[ri]) < 0) throw new Error('Saknar kolumn: ' + newRequired[ri]);
   }
   throw new Error('Okänt CSV-format.');
 }
-
 function validateRow(row) {
   var issues = [];
   if (!row.work_id) issues.push(['work_id','','','missing','Saknar work_id']);
@@ -289,7 +177,6 @@ function validateRow(row) {
   if (['E','SE','AM'].indexOf(row.agreement_type) < 0) issues.push(['agreement_type', row.agreement_type, '', 'invalid', 'Ogiltig avtalstyp']);
   return issues.map(function(a){ return { work_id: row.work_id, field: a[0], original_value: a[1], validated_value: a[2], status: a[3], comment: a[4] }; });
 }
-
 function detectDuplicates(rows) {
   var seen = {}; var dups = [];
   for (var i = 0; i < rows.length; i++) {
@@ -300,7 +187,6 @@ function detectDuplicates(rows) {
   }
   return dups;
 }
-
 function tierGate(distinct) {
   var c = window.KATALOGHUB_TIER_CONFIG, u = window.KATALOGHUB_USAGE_STATE;
   if (typeof c.maxWorksPerValidation === 'number' && distinct > c.maxWorksPerValidation) return { status: 'blocked', reason: TIER_MESSAGES.LIMIT_WORKS, code: 'LIMIT_WORKS' };
@@ -308,12 +194,7 @@ function tierGate(distinct) {
   if (typeof c.maxCatalogsPerPeriod === 'number' && (u.catalogsThisPeriod || 0) >= c.maxCatalogsPerPeriod) return { status: 'blocked', reason: TIER_MESSAGES.LIMIT_CATALOGS, code: 'LIMIT_CATALOGS' };
   return { status: 'allowed', reason: TIER_MESSAGES.OK, code: 'OK' };
 }
-
 function uniqueCount(rows, key) { var seen = {}, n = 0; for (var i = 0; i < rows.length; i++) { var v = (rows[i][key] || '').trim(); if (v && !seen[v]) { seen[v] = 1; n++; } } return n; }
-
-// Embedded 15-work test catalog (new 9-column schema). Click "Hämta
-// exempelfil" to download. The catalog contains realistic data with
-// intentional issues so the validator finds something to report.
 var SAMPLE_CSV = [
   'work_id,title,writer_name,writer_ipi,role_code,share,agreement_type,iswc,isrc',
   'W-001,Midnattssol,Erik Andersson,00712984310,CA,50,E,T-100.001.001-1,SE-NRD-26-10001',
@@ -348,7 +229,6 @@ var SAMPLE_CSV = [
   'W-015,Norrlands Hjärta,Lars Petersen,00111222333,CA,50,E,T-100.015.015-6,SE-NRD-26-10015',
   'W-015,Norrlands Hjärta,Mikael Östberg,00888999000,CA,50,E,T-100.015.015-6,SE-NRD-26-10015'
 ].join('\n');
-
 function downloadSample() {
   var blob = new Blob([SAMPLE_CSV], { type: 'text/csv;charset=utf-8' });
   var url = URL.createObjectURL(blob);
@@ -356,11 +236,8 @@ function downloadSample() {
   a.href = url; a.download = 'kataloghub-exempel.csv'; a.click();
   URL.revokeObjectURL(url);
 }
-
 $('sample-link').addEventListener('click', function(e){ e.preventDefault(); downloadSample(); });
-
 var parsed = null; var lastResult = null;
-
 $('file').addEventListener('change', function(e){
   var f = e.target.files[0]; if (!f) return;
   $('file-name').textContent = f.name;
@@ -371,22 +248,18 @@ $('file').addEventListener('change', function(e){
   };
   r.readAsText(f, 'UTF-8');
 });
-
 $('start').addEventListener('click', function(){
   if (!parsed) return;
   var distinct = uniqueCount(parsed, 'work_id');
   var gate = tierGate(distinct);
   if (gate.status === 'blocked') { setStatus('<strong>' + escapeHtml(gate.reason) + '</strong><span class="code">' + gate.code + '</span>', 'blocked'); $('actions').style.display = 'none'; return; }
-
-  var allIssues = [];
+var allIssues = [];
   for (var i = 0; i < parsed.length; i++) { var ri = validateRow(parsed[i]); for (var j = 0; j < ri.length; j++) allIssues.push(ri[j]); }
   var dups = detectDuplicates(parsed); for (var k = 0; k < dups.length; k++) allIssues.push(dups[k]);
-
-  var scanDate = new Date().toISOString().slice(0, 10);
+var scanDate = new Date().toISOString().slice(0, 10);
   var scanId = 'HR-' + scanDate.replace(/-/g, '') + '-' + Math.random().toString(36).slice(2, 6).toUpperCase();
   lastResult = { scanId: scanId, scanDate: scanDate, rows: parsed, issues: allIssues, distinctWorks: distinct };
-
-  setStatus(
+setStatus(
     '<div class="row"><span>Status</span><strong>Validering klar</strong></div>'+
     '<div class="row"><span>Verk</span><strong>' + distinct + '</strong></div>'+
     '<div class="row"><span>Rader</span><strong>' + parsed.length + '</strong></div>'+
@@ -395,9 +268,7 @@ $('start').addEventListener('click', function(){
     'success'
   );
   $('actions').style.display = 'flex';
-
-  // Render inline issues table
-  var tbody = $('issues-body'); tbody.innerHTML = '';
+var tbody = $('issues-body'); tbody.innerHTML = '';
   for (var ii = 0; ii < allIssues.length; ii++) {
     var x = allIssues[ii];
     var tr = document.createElement('tr');
@@ -414,9 +285,7 @@ $('start').addEventListener('click', function(){
   }
   $('issues-count').textContent = allIssues.length + ' rader';
   $('issues-table').style.display = 'block';
-
-  // Identifier coverage (6 bars)
-  var workTitles = {}, workHasISWC = {}, workHasISRC = {};
+var workTitles = {}, workHasISWC = {}, workHasISRC = {};
   for (var ri2 = 0; ri2 < parsed.length; ri2++) {
     var rr = parsed[ri2], wid2 = rr.work_id || '';
     if (!workTitles[wid2]) workTitles[wid2] = rr.title || '';
@@ -453,9 +322,7 @@ $('start').addEventListener('click', function(){
     + covCard('agreement_type (rader)', agrOK, parsed.length);
   $('cov-grid').innerHTML = covHtml;
   $('cov-section').style.display = 'block';
-
-  // Status per verk
-  var byWid = {};
+var byWid = {};
   for (var bi2 = 0; bi2 < allIssues.length; bi2++) {
     var iy = allIssues[bi2];
     (byWid[iy.work_id || ''] = byWid[iy.work_id || ''] || []).push(iy);
@@ -479,18 +346,12 @@ $('start').addEventListener('click', function(){
   $('works-count').textContent = workIds2.filter(function(k){ return k; }).length + ' verk';
   $('works-section').style.display = 'block';
 });
-
 function downloadFile(content, filename, mime) { var blob = new Blob([content], { type: mime + ';charset=utf-8' }); var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = filename; a.click(); URL.revokeObjectURL(url); }
-
-// 9-column worksheet shape matching the Kataloghub_Validation .xlsm template
-// (see docs/kataloghub-worksheet-template.md). Numeric identifiers are
-// prefixed with a leading apostrophe so Excel preserves leading zeros.
 var NUMERIC_FIELDS = { writer_ipi: 1, duplicate: 1, iswc: 1, isrc: 1 };
 function quoteNumericId(field, value) {
   if (value && NUMERIC_FIELDS[field]) return "'" + value;
   return value == null ? '' : value;
 }
-
 $('download-csv').addEventListener('click', function(){
   if (!lastResult) return;
   var generated = new Date().toISOString().replace('T', ' ').slice(0, 16);
@@ -509,23 +370,20 @@ $('download-csv').addEventListener('click', function(){
   }
   downloadFile(out.join('\n'), 'kataloghub-worksheet-' + lastResult.scanId + '.csv', 'text/csv');
 });
-
 $('download-pdf').addEventListener('click', function(){
   if (!lastResult) return;
   var rows = lastResult.rows;
   var issues = lastResult.issues;
   var totalRows = rows.length;
   var distinctWorks = lastResult.distinctWorks;
-
-  var byField = {}, byWorkId = {};
+var byField = {}, byWorkId = {};
   for (var bi = 0; bi < issues.length; bi++) {
     var x = issues[bi];
     (byField[x.field] = byField[x.field] || []).push(x);
     (byWorkId[x.work_id || ''] = byWorkId[x.work_id || ''] || []).push(x);
   }
   var labels = { work_id: 'Saknar work_id', writer_ipi: 'Ogiltigt IPI-format', role_code: 'Ogiltig rollkod', share: 'Ogiltig delning', agreement_type: 'Ogiltig avtalstyp', duplicate: 'Dubbletter (work_id + writer_ipi)' };
-
-  var workTitles = {}, workHasISWC = {}, workHasISRC = {};
+var workTitles = {}, workHasISWC = {}, workHasISRC = {};
   for (var ri = 0; ri < rows.length; ri++) {
     var r = rows[ri], w = r.work_id || '';
     if (!workTitles[w]) workTitles[w] = r.title || '';
@@ -538,8 +396,7 @@ $('download-pdf').addEventListener('click', function(){
     if (workHasISWC[workIds[wi]]) iswcOK++;
     if (workHasISRC[workIds[wi]]) isrcOK++;
   }
-
-  var ipiOK = 0, roleOK = 0, shareOK = 0, agrOK = 0;
+var ipiOK = 0, roleOK = 0, shareOK = 0, agrOK = 0;
   for (var pj = 0; pj < rows.length; pj++) {
     var pr = rows[pj];
     if ((pr.writer_ipi || '').length >= 9) ipiOK++;
@@ -548,12 +405,10 @@ $('download-pdf').addEventListener('click', function(){
     if (['E','SE','AM'].indexOf(pr.agreement_type) >= 0) agrOK++;
   }
   function pct(n, total) { return total ? Math.round(100 * n / total) + '%' : '0%'; }
-
-  var entries = []; for (var fk in byField) entries.push([fk, byField[fk]]);
+var entries = []; for (var fk in byField) entries.push([fk, byField[fk]]);
   entries.sort(function(a,b){ return b[1].length - a[1].length; });
   var commonList = entries.map(function(e){ return '<li><strong>' + escapeHtml(labels[e[0]] || e[0]) + ':</strong> ' + e[1].length + ' ' + (e[1].length === 1 ? 'rad' : 'rader') + '</li>'; }).join('');
-
-  var coverage = '<div class="cov-grid">'
+var coverage = '<div class="cov-grid">'
     + '<div class="cov"><div class="cov-label">ISWC per verk</div><div class="cov-bar"><div class="cov-fill" style="width:' + pct(iswcOK, distinctWorks) + ';"></div></div><div class="cov-text">' + iswcOK + ' / ' + distinctWorks + ' (' + pct(iswcOK, distinctWorks) + ')</div></div>'
     + '<div class="cov"><div class="cov-label">ISRC per verk</div><div class="cov-bar"><div class="cov-fill" style="width:' + pct(isrcOK, distinctWorks) + ';"></div></div><div class="cov-text">' + isrcOK + ' / ' + distinctWorks + ' (' + pct(isrcOK, distinctWorks) + ')</div></div>'
     + '<div class="cov"><div class="cov-label">writer_ipi (rader)</div><div class="cov-bar"><div class="cov-fill" style="width:' + pct(ipiOK, totalRows) + ';"></div></div><div class="cov-text">' + ipiOK + ' / ' + totalRows + ' (' + pct(ipiOK, totalRows) + ')</div></div>'
@@ -561,11 +416,9 @@ $('download-pdf').addEventListener('click', function(){
     + '<div class="cov"><div class="cov-label">share (rader)</div><div class="cov-bar"><div class="cov-fill" style="width:' + pct(shareOK, totalRows) + ';"></div></div><div class="cov-text">' + shareOK + ' / ' + totalRows + ' (' + pct(shareOK, totalRows) + ')</div></div>'
     + '<div class="cov"><div class="cov-label">agreement_type (rader)</div><div class="cov-bar"><div class="cov-fill" style="width:' + pct(agrOK, totalRows) + ';"></div></div><div class="cov-text">' + agrOK + ' / ' + totalRows + ' (' + pct(agrOK, totalRows) + ')</div></div>'
     + '</div>';
-
-  function detailSection(heading, items) { return items ? '<h2>' + heading + '</h2><div class="panel">' + items + '</div>' : ''; }
+function detailSection(heading, items) { return items ? '<h2>' + heading + '</h2><div class="panel">' + items + '</div>' : ''; }
   function bullets(arr, fmt) { return (arr || []).map(fmt).join(''); }
-
-  var idSec = '';
+var idSec = '';
   var ipiItems  = bullets(byField.writer_ipi, function(i){ return '<li>' + escapeHtml(i.work_id || '(tom)') + ' · ipi <code>' + escapeHtml(i.original_value || '(tom)') + '</code> — ' + escapeHtml(i.comment) + '</li>'; });
   var widItems  = bullets(byField.work_id,    function(i){ return '<li>Rad utan work_id — ' + escapeHtml(i.comment) + '</li>'; });
   var dupItems  = bullets(byField.duplicate,  function(i){ return '<li>' + escapeHtml(i.work_id) + ' · ipi <code>' + escapeHtml(i.original_value) + '</code> — ' + escapeHtml(i.comment) + '</li>'; });
@@ -586,8 +439,7 @@ $('download-pdf').addEventListener('click', function(){
       + '</div>';
   }
   var shareSec = detailSection('Andelsvalidering', bullets(byField.share, function(i){ return '<li>' + escapeHtml(i.work_id) + ' · share = <strong>' + escapeHtml(i.original_value) + '</strong> — ' + escapeHtml(i.comment) + '</li>'; }) ? '<ul>' + bullets(byField.share, function(i){ return '<li>' + escapeHtml(i.work_id) + ' · share = <strong>' + escapeHtml(i.original_value) + '</strong> — ' + escapeHtml(i.comment) + '</li>'; }) + '</ul>' : '');
-
-  var workRowsHtml = '';
+var workRowsHtml = '';
   for (var wj = 0; wj < workIds.length; wj++) {
     var wid = workIds[wj]; if (!wid) continue;
     var t = workTitles[wid] || '';
@@ -597,44 +449,43 @@ $('download-pdf').addEventListener('click', function(){
     workRowsHtml += '<tr><td class="wid">' + escapeHtml(wid) + '</td><td>' + escapeHtml(t) + '</td><td>' + pill + '</td><td>' + escapeHtml(keyIssues) + '</td></tr>';
   }
   var worksWithIssues = Object.keys(byWorkId).filter(function(k){ return k; }).length;
-
-  var html = '<!DOCTYPE html>\n<html lang="sv">\n<head>\n<meta charset="UTF-8">\n<title>Valideringsrapport — Kataloghub</title>\n<style>\n'
-    + 'body { background:#fff; color:#111; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; line-height:1.55; padding:32px 28px 64px; }\n'
-    + '.container { max-width:1080px; margin:0 auto; }\n'
-    + 'h1 { font-size:18px; color:#1f7a3a; margin-bottom:6px; }\n'
-    + '.meta { font-size:12px; color:#555; }\n'
-    + '.print-btn { background:#1f7a3a; color:#fff; border:0; border-radius:4px; padding:8px 14px; font-weight:600; cursor:pointer; font-size:12px; margin-top:8px; }\n'
-    + '.summary { display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin:18px 0; }\n'
-    + '.card { border:1px solid #e5e5e5; border-radius:6px; padding:12px 14px; }\n'
-    + '.card .label { font-size:11px; color:#777; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }\n'
-    + '.card .value { font-size:22px; font-weight:600; }\n'
-    + 'h2 { font-size:13px; text-transform:uppercase; letter-spacing:0.08em; color:#1f7a3a; margin:24px 0 8px; }\n'
-    + '.panel { border:1px solid #e5e5e5; border-radius:6px; padding:12px 16px; }\n'
-    + '.panel ul { margin:0; padding-left:20px; } .panel li { font-size:13px; color:#333; padding:4px 0; }\n'
-    + '.disclaimer { border:1px solid #e5e5e5; border-radius:6px; padding:12px 16px; margin-top:18px; font-size:12px; color:#444; }\n'
-    + '.disclaimer p { margin-bottom:4px; }\n'
-    + 'header { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; padding-bottom:16px; border-bottom:1px solid #e5e5e5; margin-bottom:18px; }\n'
-    + '.card .sub { font-size:11px; color:#777; margin-top:2px; }\n'
-    + '.card.red .value { color:#c43838; } .card.amber .value { color:#a86c20; }\n'
-    + '.panel li code { background:#f6f6f6; border:1px solid #e5e5e5; border-radius:3px; padding:1px 5px; font-size:12px; color:#1f7a3a; }\n'
-    + '.panel .group-h { font-weight:700; color:#111; margin-top:10px; margin-bottom:4px; font-size:11px; text-transform:uppercase; letter-spacing:0.04em; }\n'
-    + '.panel .group-h:first-child { margin-top:0; }\n'
-    + '.cov-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:14px; }\n'
-    + '.cov { border:1px solid #e5e5e5; border-radius:6px; padding:12px 14px; }\n'
-    + '.cov-label { font-size:11px; color:#777; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; }\n'
-    + '.cov-bar { height:6px; background:#f0f0f0; border-radius:3px; overflow:hidden; margin-bottom:6px; }\n'
-    + '.cov-fill { height:6px; background:#1f7a3a; border-radius:3px; }\n'
-    + '.cov-text { font-size:12px; color:#444; font-family:monospace; }\n'
-    + 'table.works { width:100%; border-collapse:collapse; font-size:12px; border:1px solid #e5e5e5; border-radius:6px; overflow:hidden; margin-top:8px; }\n'
-    + 'table.works th, table.works td { padding:10px 14px; text-align:left; border-bottom:1px solid #e5e5e5; }\n'
-    + 'table.works th { background:#f5f5f5; font-size:10px; text-transform:uppercase; letter-spacing:0.06em; color:#555; font-weight:700; }\n'
-    + 'table.works tr:last-child td { border-bottom:0; }\n'
-    + 'table.works .wid { font-family:monospace; color:#1f7a3a; }\n'
-    + '.pill { display:inline-block; padding:2px 10px; border-radius:999px; font-size:10px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; }\n'
-    + '.pill.major { background:#fdeaea; color:#c43838; border:1px solid #f3c7c7; }\n'
-    + '.pill.clean { background:#e7f7f1; color:#0f6657; border:1px solid #b5dccb; }\n'
-    + '@media print { .print-btn { display:none; } body { padding:20px; } }\n'
-    + '</style>\n</head>\n<body>\n<div class="container">\n'
+var html = '<!DOCTYPE html>\n<html lang="sv">\n<head>\n<meta charset="UTF-8">\n<title>Valideringsrapport — Kataloghub</title>\n<style>\n'
+ + 'body{background:#fff;color:#111;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.55;padding:32px 28px 64px;}\n'
+ + '.container{max-width:1080px;margin:0 auto;}\n'
+ + 'h1{font-size:18px;color:#1f7a3a;margin-bottom:6px;}\n'
+ + '.meta{font-size:12px;color:#555;}\n'
+ + '.print-btn{background:#1f7a3a;color:#fff;border:0;border-radius:4px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:12px;margin-top:8px;}\n'
+ + '.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0;}\n'
+ + '.card{border:1px solid #e5e5e5;border-radius:6px;padding:12px 14px;}\n'
+ + '.card .label{font-size:11px;color:#777;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;}\n'
+ + '.card .value{font-size:22px;font-weight:600;}\n'
+ + 'h2{font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:#1f7a3a;margin:24px 0 8px;}\n'
+ + '.panel{border:1px solid #e5e5e5;border-radius:6px;padding:12px 16px;}\n'
+ + '.panel ul{margin:0;padding-left:20px;}.panel li{font-size:13px;color:#333;padding:4px 0;}\n'
+ + '.disclaimer{border:1px solid #e5e5e5;border-radius:6px;padding:12px 16px;margin-top:18px;font-size:12px;color:#444;}\n'
+ + '.disclaimer p{margin-bottom:4px;}\n'
+ + 'header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding-bottom:16px;border-bottom:1px solid #e5e5e5;margin-bottom:18px;}\n'
+ + '.card .sub{font-size:11px;color:#777;margin-top:2px;}\n'
+ + '.card.red .value{color:#c43838;}.card.amber .value{color:#a86c20;}\n'
+ + '.panel li code{background:#f6f6f6;border:1px solid #e5e5e5;border-radius:3px;padding:1px 5px;font-size:12px;color:#1f7a3a;}\n'
+ + '.panel .group-h{font-weight:700;color:#111;margin-top:10px;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;}\n'
+ + '.panel .group-h:first-child{margin-top:0;}\n'
+ + '.cov-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}\n'
+ + '.cov{border:1px solid #e5e5e5;border-radius:6px;padding:12px 14px;}\n'
+ + '.cov-label{font-size:11px;color:#777;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;}\n'
+ + '.cov-bar{height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;margin-bottom:6px;}\n'
+ + '.cov-fill{height:6px;background:#1f7a3a;border-radius:3px;}\n'
+ + '.cov-text{font-size:12px;color:#444;font-family:monospace;}\n'
+ + 'table.works{width:100%;border-collapse:collapse;font-size:12px;border:1px solid #e5e5e5;border-radius:6px;overflow:hidden;margin-top:8px;}\n'
+ + 'table.works th,table.works td{padding:10px 14px;text-align:left;border-bottom:1px solid #e5e5e5;}\n'
+ + 'table.works th{background:#f5f5f5;font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:#555;font-weight:700;}\n'
+ + 'table.works tr:last-child td{border-bottom:0;}\n'
+ + 'table.works .wid{font-family:monospace;color:#1f7a3a;}\n'
+ + '.pill{display:inline-block;padding:2px 10px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;}\n'
+ + '.pill.major{background:#fdeaea;color:#c43838;border:1px solid #f3c7c7;}\n'
+ + '.pill.clean{background:#e7f7f1;color:#0f6657;border:1px solid #b5dccb;}\n'
+ + '@media print{.print-btn{display:none;}body{padding:20px;}}\n'
+ + '</style>\n</head>\n<body>\n<div class="container">\n'
     + '<header>\n'
     + '  <div>\n'
     + '    <h1>Kataloghub · Valideringsrapport</h1>\n'
@@ -666,11 +517,9 @@ $('download-pdf').addEventListener('click', function(){
   var w = window.open('', '_blank');
   if (!w) { alert('Pop-up blockerad — tillåt pop-ups för denna sida.'); return; }
   w.document.open(); w.document.write(html); w.document.close();
-});
-</script>
+});</script>
 <!-- src-guard:v1 -->
-<script>
-(function(){
+<script>(function(){
   document.addEventListener('contextmenu', function(e){ e.preventDefault(); }, false);
   document.addEventListener('keydown', function(e){
     var k = (e.key || '').toLowerCase();
@@ -678,7 +527,6 @@ $('download-pdf').addEventListener('click', function(){
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) { e.preventDefault(); return false; }
     if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) { e.preventDefault(); return false; }
   }, false);
-})();
-</script>
+})();</script>
 </body>
 </html>

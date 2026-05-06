@@ -28,7 +28,13 @@
 
   .qa { border-top: 1px solid #222; padding: 18px 0; }
   .qa h2 { font-size: 15px; font-weight: 600; margin: 0 0 8px; color: #ffffff; }
-  .qa p { font-size: 14px; color: #cccccc; margin: 0; }
+  .qa p { font-size: 14px; color: #cccccc; margin: 0 0 6px; }
+  .qa p:last-child { margin-bottom: 0; }
+
+  .cta-block { border-top: 1px solid #222; padding: 32px 0 8px; text-align: center; }
+  .cta-block p { color: #cccccc; font-size: 14px; margin: 0 0 14px; }
+  .btn-primary { display: inline-block; background: #1f7a3a; color: #ffffff; padding: 12px 22px; border-radius: 999px; font-size: 14px; font-weight: 700; letter-spacing: 0.02em; }
+  .btn-primary:hover { background: #2a9249; }
 
   footer.foot { color: #888; font-size: 12px; text-align: center; padding: 24px; border-top: 1px solid #222; margin-top: 32px; }
   footer.foot p { margin: 4px 0; }
@@ -91,10 +97,30 @@
     <p>Nej. Ingen integration och ingen systemåtkomst krävs.</p>
   </div>
 
+  <div class="qa">
+    <h2>Hur mycket kostar Kataloghub?</h2>
+    <p>Kataloghub har ett fast månadspris baserat på katalogstorlek.</p>
+    <p>Tjänsten omfattar endast validering — inga integrationer, ingen automation, ingen systemåtkomst.</p>
+    <p>Fullständig prislista finns på sidan <a href="pricing-kataloghub.html" style="color:#6dbe85;text-decoration:underline;">Priser</a>.</p>
+  </div>
+
+  <div class="qa">
+    <h2>Hur kommer jag igång?</h2>
+    <p>Ladda upp en CSV-fil med dina verk.</p>
+    <p>Kataloghub kör en validering och visar alla avvikelser.</p>
+    <p>Du kan exportera resultatet direkt eller skicka det vidare till HeyRoya för korrigering.</p>
+  </div>
+
+  <div class="cta-block">
+    <p>Redo att validera din katalog?</p>
+    <a class="btn-primary" href="/app/kataloghub">Kom igång — ladda upp din CSV ›</a>
+  </div>
+
 </main>
 
 <footer class="foot">
-  <p>Kataloghub – Filbaserad validering av katalogmetadata. Filer lagras inte efter leverans.</p>
+  <p>Kataloghub drivs som en filbaserad valideringstjänst för katalogmetadata. Filer lagras inte efter leverans. Korrigeringar hanteras via partner HeyRoya.</p>
+  <p style="font-size:11px;opacity:0.7;">Lanserad maj 2026 · <a href="om-oss.html" style="color:inherit;text-decoration:underline;">Om oss</a></p>
 </footer>
 
 <!-- src-guard:v1 -->

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kataloghub | Catalog file validation</title>
+  <style>:root{--gold:#ffb75c;--gold-text:#0b1220;--text:#ffffff;--text-soft:#d8dde7;--line:rgba(255,255,255,0.18);--panel:rgba(8,17,32,0.55);}*{box-sizing:border-box;}html,body{margin:0;padding:0;}body{min-height:100vh;color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.5;background:linear-gradient(90deg,rgba(7,17,33,0.85) 0%,rgba(7,17,33,0.45) 38%,rgba(7,17,33,0.15) 65%,rgba(7,17,33,0.45) 100%),url("assets/katalogpic.jpg") center center / cover no-repeat fixed;background-color:#0b1220;}a{color:inherit;text-decoration:none;}header.topnav{max-width:1280px;margin:0 auto;padding:26px 40px 22px;display:flex;align-items:center;justify-content:space-between;gap:24px;}.brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;font-size:13px;}.mark{width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff1d6 0 14%,#ffb75c 50%,#b96521 100%);box-shadow:0 0 14px rgba(255,183,92,0.35);}nav.primary{display:flex;align-items:center;gap:26px;font-size:13px;font-weight:600;color:#d6dbe4;}nav.primary a:hover{color:#fff;}.lang-toggle{display:inline-flex;gap:2px;padding:3px;border:1px solid var(--line);border-radius:999px;margin-left:6px;}.lang-toggle span{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:22px;border-radius:999px;font-weight:800;font-size:11px;}.lang-toggle a:last-child span{background:var(--gold);color:var(--gold-text);}.hero{max-width:1280px;margin:0 auto;padding:110px 40px 140px;}.hero h1{margin:0;font-size:clamp(56px,7.5vw,96px);line-height:0.96;font-weight:900;max-width:720px;letter-spacing:-0.01em;text-shadow:0 4px 32px rgba(0,0,0,0.55);}.hero p.lead{margin:26px 0 36px;max-width:580px;font-size:clamp(17px,1.6vw,21px);line-height:1.45;color:#f1f3f8;text-shadow:0 2px 14px rgba(0,0,0,0.55);}.ctas{display:flex;flex-wrap:wrap;gap:14px;}.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font-weight:800;font-size:15px;border:1px solid transparent;}.btn-primary{background:var(--gold);color:var(--gold-text);border-color:var(--gold);}.btn-primary:hover{background:#ffc77b;border-color:#ffc77b;}.btn .arrow{font-size:16px;line-height:1;transform:translateY(-1px);}main{max-width:1280px;margin:0 auto;padding:0 40px 100px;}section{padding:36px 0 0;}.section-title{margin:0 0 14px;color:var(--gold);font-size:13px;letter-spacing:0.14em;text-transform:uppercase;font-weight:800;}.intro{margin:0 0 26px;max-width:760px;color:var(--text-soft);font-size:14.5px;line-height:1.65;text-shadow:0 1px 8px rgba(0,0,0,0.45);}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;}.card{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:22px 24px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}.card h3{margin:0 0 10px;font-size:15px;font-weight:800;color:#fff;}.card p{margin:0;font-size:13.5px;line-height:1.65;color:var(--text-soft);}.steps{list-style:none;counter-reset:step;margin:0;padding:0;border:1px solid var(--line);border-radius:12px;background:var(--panel);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow:hidden;}.steps li{counter-increment:step;display:flex;align-items:center;gap:16px;padding:18px 24px;border-bottom:1px solid var(--line);font-size:14px;color:var(--text-soft);}.steps li:last-child{border-bottom:0;}.steps li::before{content:counter(step);width:26px;height:26px;border-radius:50%;border:1px solid var(--gold);color:var(--gold);display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0;}@media (max-width:900px){header.topnav{flex-direction:column;align-items:flex-start;gap:14px;padding:18px 20px;}.hero{padding:72px 20px 96px;}main{padding:0 20px 80px;}.cards{grid-template-columns:1fr 1fr;}}@media (max-width:600px){.cards{grid-template-columns:1fr;}nav.primary{flex-wrap:wrap;gap:14px;}}</style>
+</head>
+<body>
+
+<header class="topnav">
+  <div class="brand">
+    <span class="mark"></span>
+    <span>Kataloghub</span>
+  </div>
+  <nav class="primary">
+    <a href="index-en.html">Start</a>
+    <a href="/app/kataloghub">Validation</a>
+    <a href="faq-en.html">FAQ</a>
+    <a href="pricing-en.html">Pricing</a>
+    <a href="contact-en.html">Contact</a>
+    <span class="lang-toggle">
+      <a href="index.html"><span>SV</span></a>
+      <a href="index-en.html"><span>EN</span></a>
+    </span>
+  </nav>
+</header>
+
+<section class="hero" id="start">
+  <h1>Catalog file validation</h1>
+  <p class="lead">
+    File-based checks of structure, identifiers, and format.
+    No integration. No automation. No system access.
+  </p>
+  <div class="ctas">
+    <a class="btn btn-primary" href="/app/kataloghub">Start validation <span class="arrow">›</span></a>
+  </div>
+</section>
+
+<main>
+
+  <section id="what">
+    <p class="section-title">What Kataloghub does</p>
+    <p class="intro">
+      Kataloghub validates exported catalog files in CSV format.
+      The result is a PDF report and a CSV dataset showing structural issues.
+    </p>
+    <div class="cards">
+      <article class="card">
+        <h3>PDF report</h3>
+        <p>Summary of missing identifiers, invalid formats, and duplicates.</p>
+      </article>
+      <article class="card">
+        <h3>CSV dataset</h3>
+        <p>Machine-readable list of issues per row. Used as decision support.</p>
+      </article>
+      <article class="card">
+        <h3>Structure check</h3>
+        <p>Verification of column order, required fields, and file integrity.</p>
+      </article>
+      <article class="card">
+        <h3>Identifier check</h3>
+        <p>Validation of work_id, writer_ipi, iswc, and isrc.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="workflow">
+    <p class="section-title" style="margin-top: 32px;">Workflow</p>
+    <ol class="steps">
+      <li><span>The publisher exports a catalog file in CSV format.</span></li>
+      <li><span>The file is validated against structural requirements.</span></li>
+      <li><span>A PDF report and CSV dataset are delivered.</span></li>
+      <li><span>Any corrections are handled via HeyRoya.</span></li>
+    </ol>
+  </section>
+
+</main>
+
+<!-- src-guard:v1 -->
+<script>(function(){
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); }, false);
+  document.addEventListener('keydown', function(e){
+    var k = (e.key || '').toLowerCase();
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && (k === 'i' || k === 'j' || k === 'c')) { e.preventDefault(); return false; }
+    if ((e.ctrlKey || e.metaKey) && (k === 'u' || k === 's')) { e.preventDefault(); return false; }
+  }, false);
+})();</script>
+</body>
+</html>
