@@ -1,11 +1,19 @@
-work_id,title,writer_name,writer_ipi,role_code,share,agreement_type,iswc,isrc,updated
-W-0001,Skär,Anna Holm,123456789,CA,100,E,T-200.001.001-1,SE-ABC-25-00001,FALSE
-W-0002,Drottningens Klang,Erik Andersson,234567890,C,60,SE,T-200.002.002-2,,FALSE
-W-0002,Drottningens Klang,Maria Lindqvist,345678901,A,40,SE,T-200.002.002-2,,FALSE
-W-0003,Frusen Tid,Lars Petersen,998877665,CA,100,E,T-200.003.003-3,,TRUE
-W-0004,Bergslagen,Karin Olsson,456789012,CA,90,E,,,TRUE
-W-0005,Glömda Dagar,Sofie Berg,567890123,CA,100,E,T-200.005.005-5,,TRUE
-W-0006,Vinterns Ros,Mikael Östberg,678901234,CA,100,E,T-200.006.006-6,,FALSE
-W-0007,Nordvinden,Tobias Schmidt,789012345,CA,100,AM,T-200.007.007-7,,TRUE
-W-0008,Berlin Drömmar,Pierre Lambert,890123456,CA,100,SE,T-200.008.008-8,,TRUE
-W-0009,Paris i Höst,Eva Nilsson,998877666,CA,100,E,T-200.009.009-9,,TRUE
+# Correction file returned to Kataloghub from HeyRoya / publisher.
+# Source worksheet: HR-20260506-A1B2 (Example Publishing AB), generated 2026-05-06.
+# Format: HeyRoya Metadata Correction Template (file-based correction workflow).
+# - Rows where 'corrected_value' is blank were accepted as-is (no change).
+# - Rows where 'corrected_value' is populated represent publisher edits.
+#   Multi-field corrections use 'field=value' notation, semicolon-separated.
+# - 'notes' may carry the original Kataloghub validation issue and/or publisher commentary.
+# - Numeric identifiers (writer_ipi, publisher_ipi) are quoted with a leading ' for Excel compatibility.
+work id,title,writer name,writer ipi,role code,share percentage,publisher name,publisher ipi,STIM,iswc,isrc,corrected value,notes
+W-0001,Skär,Anna Holm,'123456789,CA,100,Example Publishing AB,'987654321,Y,T-200.001.001-1,SE-ABC-25-00001,,
+W-0002,Drottningens Klang,Erik Andersson,'234567890,C,60,Example Publishing AB,'987654321,Y,T-200.002.002-2,,,
+W-0002,Drottningens Klang,Maria Lindqvist,'345678901,A,40,Example Publishing AB,'987654321,Y,T-200.002.002-2,,,
+W-0003,Frusen Tid,Lars Petersen,,CA,100,Example Publishing AB,'987654321,Y,T-200.003.003-3,,writer_ipi='998877665,writer_ipi saknas
+W-0004,Bergslagen,Karin Olsson,'456789012,WR,90,Example Publishing AB,'987654321,Y,,,role_code=CA,role_code 'WR' ogiltig
+W-0005,Glömda Dagar,Sofie Berg,'567890123,CA,100,Example Publishing AB,'987654321,Y,T-200.005.005-5,,,
+W-0006,Vinterns Ros,Mikael Östberg,'678901234,CA,100,Example Publishing AB,'987654321,Y,T-200.006.006-6,,,
+W-0007,Nordvinden,Tobias Schmidt,'789012345,CA,150,Example Publishing AB,'987654321,Y,T-200.007.007-7,,share_percentage=100,share_percentage 150 ogiltig (>100)
+,Berlin Drömmar,Pierre Lambert,'890123456,CA,100,Example Publishing AB,'987654321,Y,T-200.008.008-8,,work_id=W-0008,work_id saknas
+W-0009,Paris i Höst,Eva Nilsson,'12345,CA,100,Example Publishing AB,'987654321,Y,T-200.009.009-9,,writer_ipi='998877666,writer_ipi format ogiltigt

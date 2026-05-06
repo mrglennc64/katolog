@@ -1,1 +1,8 @@
-work_id,title,writer_name,writer_ipi,role_code,share,agreement_type,iswc,isrc,updated
+# Correction file returned to Kataloghub from HeyRoya / publisher.
+# Format: HeyRoya Metadata Correction Template (file-based correction workflow).
+# - Rows where 'corrected_value' is blank were accepted as-is (no change).
+# - Rows where 'corrected_value' is populated represent publisher edits.
+#   Multi-field corrections use 'field=value' notation, semicolon-separated.
+# - 'notes' may carry the original Kataloghub validation issue and/or publisher commentary.
+# - Numeric identifiers (writer_ipi, publisher_ipi) are quoted with a leading ' for Excel compatibility.
+work id,title,writer name,writer ipi,role code,share percentage,publisher name,publisher ipi,STIM,iswc,isrc,corrected value,notes
